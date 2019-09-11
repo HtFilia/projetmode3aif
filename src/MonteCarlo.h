@@ -6,8 +6,14 @@
 #define PROJETMODPRO_MONTECARLO_H
 
 
-class MonteCarlo {
+#include <utility>
+#include "BlackScholesModel.h"
+#include "Option.h"
 
+static class MonteCarlo {
+
+public:
+    std::pair<double, double> price (Option option, BlackScholesModel blackScholesModel);
 };
 
 

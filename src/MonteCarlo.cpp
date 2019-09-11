@@ -3,3 +3,7 @@
 //
 
 #include "MonteCarlo.h"
+
+std::pair<double, double> MonteCarlo::price(Option option, BlackScholesModel blackScholesModel) {
+    return std::pair<double, double>();
+}
