@@ -3,3 +3,11 @@
 //
 
 #include "BlackScholesModel.h"
+
+void BlackScholesModel::asset(float **&market) {
+
+    //TODO
+    
+}
+
+//TODO

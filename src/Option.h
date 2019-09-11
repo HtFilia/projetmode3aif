@@ -64,6 +64,8 @@ public:
      * \return le payoff de l'option.
      */
     virtual float payoff(float** valuesShares) = 0;
+
+
 };
 
 
