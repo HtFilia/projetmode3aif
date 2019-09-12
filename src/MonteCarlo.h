@@ -30,41 +30,149 @@ class MonteCarlo {
 private:
 
     /**
-     * \brief sampleNumber représente le nombre de simulations dans la méthode de MonteCarlo.
+     * \brief pointeur vers le modèle utilisé.
      *
      */
-     long sampleNumber;
+    BlackScholesModel *mod_;
+
+    /**
+     * \brief pointeur vers l'option utilisée.
+     *
+     */
+    Option *opt_; /*! pointeur sur l'option */
+
+    /**
+     * \brief pointeur vers le générateur aléatoire utilisé.
+     *
+     */
+    PnlRng *rng_; /*! pointeur sur le générateur */
+
+    /**
+     * \brief pas de différence finie.
+     *
+     */
+    double fdStep_; /*! pas de différence finie */
+
+    /**
+     * \brief nombre de tirages Monte Carlo souhaité.
+     *
+     */
+    int nbSamples_; /*! nombre de tirages Monte Carlo */
 
 
 public:
 
-    /**
-     * \brief Getter de l'attribut \refitem sampleNumber.
-     *
-     * @return La valeur de l'attribut  \refitem sampleNumber.
-     */
-    long getSampleNumber() {
-        return this->sampleNumber;
-    }
 
     /**
-     * \brief Setter de l'attribut \refitem sampleNumber.
+     * \brief Getter de l'attribut \refitem mod_
      *
-     * \param newSampleNumber La nouvelle valeur de \refitem sampleNumber.
+     * @return le pointeur vers le modèle utilisé, \refitem mod_
      *
      */
-    void setSampleNumber(long newSampleNumber) {
-        this->sampleNumber = newSampleNumber;
-    }
+    BlackScholesModel* getMod();
 
     /**
-     * TODO
-     * @param option
-     * @param blackScholesModel
-     * @return
+     * \brief Getter de l'attribut \refitem opt_
+     *
+     * @return le pointeur vers l'option utilisée, \refitem opt_
+     *
      */
-    std::pair<double, double> price (Option option,
-            BlackScholesModel blackScholesModel);
+    Option* getOption();
+
+    /**
+    * \brief Getter de l'attribut \refitem rng_
+    *
+    * @return le pointeur vers générateur aléatoire utilisé, \refitem rng_
+    *
+    */
+    PnlRng* getRng();
+
+    /**
+     * \brief Getter de l'attribut \refitem fdStep_
+     *
+     * @return le pas de différence finie, \refitem fdStep_
+     *
+     */
+    double getStep();
+
+    /**
+     * \brief Getter de l'attribut \refitem nbSamples_
+     *
+     * @return le nombre de tirages Monte Carlo souhaité, \refitem nbSamples_
+     *
+     */
+    int getSampleSize();
+
+    /**
+     * \brief Setter de l'attribut \refitem mod_
+     *
+     * @param[in] newModel le nouveau modèle utilisé.
+     *
+     */
+    void setMod(BlackScholesModel* newModel);
+
+    /**
+     * \brief Setter de l'attribut \refitem opt_
+     *
+     * @param[in] newOption la nouvelle option utilisée.
+     *
+     */
+    void setOption(Option* newOption);
+
+    /**
+     * \brief Setter de l'attribut \refitem rng_
+     *
+     * @param[in] newRng le nouveau générateur aléatoire utilisé.
+     *
+     */
+    void setRng(PnlRng* newRng);
+
+    /**
+     * \brief Setter de l'attribut \refitem fdStep_
+     *
+     * @param[in] newStep le nouveau pas de différence finie, \refitem fdStep_
+     *
+     */
+    void setStep(double newStep);
+
+    /**
+     * \brief Setter de l'attribut \refitem nbSamples_
+     *
+     * @param[in] newSampleSize le nouveau nombre de tirages Monte Carlo souhaité, \refitem nbSamples_
+     */
+    void setSampleSize(int newSampleSize);
+
+    /**
+    * Calcule le prix de l'option à la date 0
+    *
+    * @param[out] prix valeur de l'estimateur Monte Carlo
+    * @param[out] ic largeur de l'intervalle de confiance
+    */
+    void price(double &prix, double &ic);
+
+    /**
+     * Calcule le prix de l'option à la date t
+     *
+     * @param[in]  past contient la trajectoire du sous-jacent
+     * jusqu'à l'instant t
+     * @param[in] t date à laquelle le calcul est fait
+     * @param[out] prix contient le prix
+     * @param[out] ic contient la largeur de l'intervalle
+     * de confiance sur le calcul du prix
+     */
+    void price(const PnlMat *past, double t, double &prix, double &ic);
+
+    /**
+     * Calcule le delta de l'option à la date t
+     *
+     * @param[in] past contient la trajectoire du sous-jacent
+     * jusqu'à l'instant t
+     * @param[in] t date à laquelle le calcul est fait
+     * @param[out] delta contient le vecteur de delta
+     * @param[out] ic contient la largeur de l'intervalle
+     * de confiance sur le calcul du delta
+     */
+    void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
 };
 
 
