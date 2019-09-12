@@ -10,8 +10,8 @@
 #ifndef PROJETMODPRO_OPTION_H
 #define PROJETMODPRO_OPTION_H
 
-#include <libaio.h>
-#include <vector>
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 
 /**
  * \class Option
@@ -25,45 +25,34 @@ class Option {
 private:
 
     /**
-     * \brief optionType représente le type de l'option.
-     */
-    char* optionType;
-
-    /**
-     * \brief optionSize représente le nombre de sous-jacents liés à l'option.
+     * \brief T_ représente la maturité de l'option.
      *
      */
-    int optionSize;
+    double T_;
+
 
     /**
-     * \brief strike représente le strike de l'option.
+     * \brief optionSize représente la dimension du modèle (redondant avec BlackScholesModel).
      *
      */
-    float strike;
+    int size_;
 
     /**
-     * \brief maturity représente la maturité de l'option.
+     * \brief nbTimeSteps_ représente le nombre de pas de temps de discrétisation.
      *
      */
-    float maturity;
-
-    /**
-     * \brief payoffCoefficients représente les coefficients appliqués aux différents sous-jacents lors
-     *        du calcul du payoff.
-     *
-     */
-     std::vector<float> payoffCoefficients;
+    int nbTimeSteps_;
 
 public:
 
     /**
-     * \brief payoff calcule le payoff de l'option à l'aide des différents paramètres.
+     * \brief payoff calcule la valeur du payoff sur la trajectoire.
      *
-     * \param valuesShares matrice des spots des sous-jacents de l'option à chaque temps discrétisé.
+     * \param[in] path est une matrice de taille (N+1) x D contenant une trajectoire du modèle telle que créée par la fonction asset.
      *
-     * \return le payoff de l'option.
+     * \return le payoff de l'option (c'est le résultat de la fonction phi appliqué à la trajectoire).
      */
-    virtual float payoff(float** valuesShares) = 0;
+    virtual double payoff(const PnlMat *path) = 0;
 
 
 };
