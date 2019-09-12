@@ -13,12 +13,24 @@
 
 class Basket : public Option {
 
-    virtual float payoff(float** valuesShares) {
-        float res = 0;
-        for (int d = O; d < optionSize; d++) {
-            res += 0;
-        }
-        return 0;
+private:
+
+    /**
+     * \brief K_ représente le strike de l'option.
+     *
+     */
+    double K_;
+
+    /**
+     * \brief lambda_ représente le vecteur des coefficients de l'option.
+     *
+     */
+    PnlVect *lambda_;
+
+    virtual double payoff(PnlMat *path) {
+        double res = pnl_vect_scalar_prod(lambda_, lambda_) - K;
+
+        return res;
     }
 
 };
