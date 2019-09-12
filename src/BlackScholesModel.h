@@ -64,7 +64,9 @@ public:
      * @return l'attribut \refitem size_
      *
      */
-    int getSize() const;
+    int getSize() {
+        return size_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem r_
@@ -72,7 +74,9 @@ public:
      * @return l'attribut \refitem r_
      *
      */
-    double getR() const;
+    double getR() {
+        return r_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem rho_
@@ -80,7 +84,9 @@ public:
      * @return l'attribut \refitem rho_
      *
      */
-    double getRho() const;
+    double getRho() {
+        return rho_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem sigma_
@@ -88,7 +94,9 @@ public:
      * @return l'attribut \refitem sigma_
      *
      */
-    PnlVect *getSigma() const;
+    PnlVect *getSigma() {
+        return sigma_;
+    }
 
     /**
      * \brief Getter de l'attrivut \refitem spot_
@@ -96,46 +104,58 @@ public:
      * @return l'attribut \refitem sigma_
      *
      */
-    PnlVect *getSpot() const;
+    PnlVect *getSpot() {
+        return spot_;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem size_
      *
-     * @param size le nouveau nombre d'actifs du modèle, \refitem size_
+     * @param newSize le nouveau nombre d'actifs du modèle, \refitem size_
      *
      */
-    void setSize(int size);
+    void setSize(int newSize) {
+        size_ = newSize;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem r_
      *
-     * @param r le nouveau taux d'intérêt du ZC, \refitem r_
+     * @param newR le nouveau taux d'intérêt du ZC, \refitem r_
      */
-    void setR(double r);
+    void setR(double newR) {
+        r_ = newR;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem rho_
      *
-     * @param rho la nouvelle corrélation du modèle, \refitem rho_
+     * @param newRho la nouvelle corrélation du modèle, \refitem rho_
      *
      */
-    void setRho(double rho);
+    void setRho(double newRho) {
+        rho_ = newRho
+    }
 
     /**
      * \brief Setter de l'attribut \refitem sigma_
      *
-     * @param sigma le nouveau vecteur de volatilités du modèle, \refitem sigma_
+     * @param newSigma le nouveau vecteur de volatilités du modèle, \refitem sigma_
      *
      */
-    void setSigma(PnlVect *sigma);
+    void setSigma(PnlVect *newSigma) {
+        sigma_ = newSigma;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem spot_
      *
-     * @param spot le nouveau vecteur des spots initiaux du modèle, \refitem spot_
+     * @param newSpot le nouveau vecteur des spots initiaux du modèle, \refitem spot_
      *
      */
-    void setSpot(PnlVect *spot);
+    void setSpot(PnlVect *newSpot) {
+        spot_ = newSpot;
+    }
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path

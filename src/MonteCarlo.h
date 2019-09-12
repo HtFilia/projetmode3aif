@@ -69,7 +69,9 @@ public:
      * @return le pointeur vers le modèle utilisé, \refitem mod_
      *
      */
-    BlackScholesModel* getMod();
+    BlackScholesModel* getMod() {
+        return mod_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem opt_
@@ -77,7 +79,9 @@ public:
      * @return le pointeur vers l'option utilisée, \refitem opt_
      *
      */
-    Option* getOption();
+    Option* getOption() {
+        return opt_;
+    }
 
     /**
     * \brief Getter de l'attribut \refitem rng_
@@ -85,7 +89,9 @@ public:
     * @return le pointeur vers générateur aléatoire utilisé, \refitem rng_
     *
     */
-    PnlRng* getRng();
+    PnlRng* getRng() {
+        return rng_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem fdStep_
@@ -93,7 +99,9 @@ public:
      * @return le pas de différence finie, \refitem fdStep_
      *
      */
-    double getStep();
+    double getStep() {
+        return fdStep_;
+    }
 
     /**
      * \brief Getter de l'attribut \refitem nbSamples_
@@ -101,7 +109,9 @@ public:
      * @return le nombre de tirages Monte Carlo souhaité, \refitem nbSamples_
      *
      */
-    int getSampleSize();
+    int getSampleSize() {
+        return nbSamples_;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem mod_
@@ -109,7 +119,9 @@ public:
      * @param[in] newModel le nouveau modèle utilisé.
      *
      */
-    void setMod(BlackScholesModel* newModel);
+    void setMod(BlackScholesModel* newModel) {
+        mod_ = newModel;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem opt_
@@ -117,7 +129,9 @@ public:
      * @param[in] newOption la nouvelle option utilisée.
      *
      */
-    void setOption(Option* newOption);
+    void setOption(Option* newOption) {
+        opt_ = newOption;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem rng_
@@ -125,7 +139,9 @@ public:
      * @param[in] newRng le nouveau générateur aléatoire utilisé.
      *
      */
-    void setRng(PnlRng* newRng);
+    void setRng(PnlRng* newRng) {
+        rng_ = newRng;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem fdStep_
@@ -133,14 +149,18 @@ public:
      * @param[in] newStep le nouveau pas de différence finie, \refitem fdStep_
      *
      */
-    void setStep(double newStep);
+    void setStep(double newStep) {
+        fdStep_ = newStep;
+    }
 
     /**
      * \brief Setter de l'attribut \refitem nbSamples_
      *
      * @param[in] newSampleSize le nouveau nombre de tirages Monte Carlo souhaité, \refitem nbSamples_
      */
-    void setSampleSize(int newSampleSize);
+    void setSampleSize(int newSampleSize) {
+        nbSamples_ = newSampleSize;
+    }
 
     /**
     * Calcule le prix de l'option à la date 0
