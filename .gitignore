@@ -117,4 +117,7 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
+# Idea directory
+.idea/
+
 # End of https://www.gitignore.io/api/c++,clion

@@ -1,6 +1,0 @@
-#ifndef PROJETMODPRO_LIBRARY_H
-#define PROJETMODPRO_LIBRARY_H
-
-void hello();
-
-#endif //PROJETMODPRO_LIBRARY_H
