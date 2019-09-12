@@ -11,6 +11,10 @@
 #ifndef PROJETMODPRO_BASKET_H
 #define PROJETMODPRO_BASKET_H
 
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_mathtools.h"
+
+
 class Basket : public Option {
 
 private:
@@ -28,9 +32,7 @@ private:
     PnlVect *lambda_;
 
     virtual double payoff(PnlMat *path) {
-        double res = pnl_vect_scalar_prod(lambda_, lambda_) - K;
-
-        return res;
+        return MAX(pnl_vect_scalar_prod(lambda_, pnl_mat_get_row(path, nbTimeSteps_)) - K_, 0);
     }
 
 };

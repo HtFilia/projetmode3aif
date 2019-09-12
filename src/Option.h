@@ -61,7 +61,7 @@ public:
      *
      */
     int getSize() {
-        return size_
+        return size_;
     }
 
     /**
