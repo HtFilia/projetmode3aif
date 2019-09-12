@@ -1,6 +1,13 @@
-//
-// Created by lebihanl on 9/11/19.
-//
+/**
+ * \file MonteCarlo.cpp
+ *
+ *
+ * \brief Fichier source de la classe MonteCarlo
+ *
+ * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
+ * Fait le 11.09.2019
+ *
+ */
 
 #include "MonteCarlo.h"
 
