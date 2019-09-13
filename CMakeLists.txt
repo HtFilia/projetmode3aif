@@ -55,7 +55,7 @@ add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectT
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Tests Pricer
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp)
 
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
