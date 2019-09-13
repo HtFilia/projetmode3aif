@@ -8,15 +8,18 @@
  *
  */
 
+
+#include <iostream>
+#include <stdio.h>
+
 #include "Basket.h"
 #include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 
-class testPayoff {
-
-	int main(int argc, char *argv[]) {
-		PnlVect* lambda = new PnlVect();
-		//Basket basketOption = new Basket(100, );
-		//basketOption
-		return 0;
-	}
-};
+int main(int argc, char *argv[]) {
+    PnlVect* lambda = pnl_vect_create_from_scalar(1, 1);
+    Basket* basketOption = new Basket(100, 10, 1, 1, lambda);
+    PnlMat* path = pnl_mat_create_from_scalar(2, 1, 110);
+    std::cout << basketOption->payoff(path);
+    return 0;
+}

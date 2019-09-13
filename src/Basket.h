@@ -37,8 +37,11 @@ public:
 	 * \brief Constructeur du Basket Option.
 	 *
 	 */
-	Basket(double strike, PnlVect *lambda) {
-		this->K_ = strike;
+	Basket(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
+		this->T_ = maturity;
+		this->size_ = size;
+        this->nbTimeSteps_ = nbTimeSteps;
+	    this->K_ = strike;
 		this->lambda_ = lambda;
 	}
 
@@ -51,7 +54,7 @@ public:
 	 * @return la valeur du payoff du Call.
 	 *
 	 */
-	virtual double payoff(PnlMat *path) {
+	double payoff(const PnlMat *path) {
 		PnlVect lastSpots = pnl_vect_wrap_mat_row(path, getTimeSteps());
 	    return MAX(
 				pnl_vect_scalar_prod(
