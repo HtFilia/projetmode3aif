@@ -222,7 +222,6 @@ $( document ).ready(function() {
       $(this).find('td > span.danger').parent().addClass('danger');
     });
 
-    /* todo list */
     var todoelements = $('.contents > .textblock > dl.reflist > dt, .contents > .textblock > dl.reflist > dd');
     for (var i = 0; i < todoelements.length; i += 2) {
       $('.contents > .textblock').append(
