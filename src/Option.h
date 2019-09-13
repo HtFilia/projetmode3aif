@@ -22,7 +22,7 @@
 class Option {
 
 
-private:
+protected:
 
     /**
      * \brief T_ représente la maturité de l'option.

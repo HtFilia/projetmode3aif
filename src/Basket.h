@@ -11,29 +11,55 @@
 #ifndef PROJETMODPRO_BASKET_H
 #define PROJETMODPRO_BASKET_H
 
+#include "Option.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
 
-
-class Basket : public Option {
+class Basket: public Option {
 
 private:
 
-    /**
-     * \brief K_ représente le strike de l'option.
-     *
-     */
-    double K_;
+	/**
+	 * \brief K_ représente le strike de l'option.
+	 *
+	 */
+	double K_;
 
-    /**
-     * \brief lambda_ représente le vecteur des coefficients de l'option.
-     *
-     */
-    PnlVect *lambda_;
+	/**
+	 * \brief lambda_ représente le vecteur des coefficients de l'option.
+	 *
+	 */
+	PnlVect *lambda_;
 
-    virtual double payoff(PnlMat *path) {
-        return MAX(pnl_vect_scalar_prod(lambda_, pnl_mat_get_row(path, nbTimeSteps_)) - K_, 0);
-    }
+public:
+
+	/**
+	 * \brief Constructeur du Basket Option.
+	 *
+	 */
+	Basket(double strike, PnlVect *lambda) {
+		this->K_ = strike;
+		this->lambda_ = lambda;
+	}
+
+	/**
+	 * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
+	 *
+	 * @param[out] path le marché contenant les spots des sous-jacents
+	 * 					aux différents temps étudiés.
+	 *
+	 * @return la valeur du payoff du Call.
+	 *
+	 */
+	virtual double payoff(PnlMat *path) {
+		PnlVect lastSpots = pnl_vect_wrap_mat_row(path, getTimeSteps());
+	    return MAX(
+				pnl_vect_scalar_prod(
+				        lambda_,
+				        &lastSpots)
+				- K_,
+				0);
+	}
 
 };
 
