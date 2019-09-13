@@ -1,5 +1,5 @@
 /**
- * \file BlackScholesModel.h
+ * \file BlackScholesModel.hpp
  *
  *
  * \brief Fichier header de la classe BlackScholesModel
@@ -134,7 +134,7 @@ public:
      *
      */
     void setRho(double newRho) {
-        rho_ = newRho
+        rho_ = newRho;
     }
 
     /**

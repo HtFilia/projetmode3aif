@@ -9,7 +9,7 @@
  *
  */
 
-#include "MonteCarlo.h"
+#include "MonteCarlo.hpp"
 
 /**
 * Calcule le prix de l'option à la date 0

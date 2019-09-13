@@ -1,5 +1,5 @@
 /**
- * \file Basket.h
+ * \file Basket.hpp
  *
  * \brief Fichier header de la classe Option
  *
@@ -11,7 +11,7 @@
 #ifndef PROJETMODPRO_BASKET_H
 #define PROJETMODPRO_BASKET_H
 
-#include "Option.h"
+#include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
 

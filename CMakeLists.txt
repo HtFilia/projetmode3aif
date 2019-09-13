@@ -41,10 +41,10 @@ add_subdirectory(src/3rdparty/jlparser)
 add_executable(test-parser src/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp)
 target_link_libraries(mc-example jl_parser ${LIBS})
 
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp)
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
 # Print compiler flags
