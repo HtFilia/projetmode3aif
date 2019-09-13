@@ -20,6 +20,11 @@ int main(int argc, char *argv[]) {
     PnlVect* lambda = pnl_vect_create_from_scalar(1, 1);
     Basket* basketOption = new Basket(100, 10, 1, 1, lambda);
     PnlMat* path = pnl_mat_create_from_scalar(2, 1, 110);
-    std::cout << basketOption->payoff(path);
+    try {
+        std::cout << basketOption->payoff(path) << std::endl;
+    }
+    catch(std::string const& chain) {
+        std::cerr << chain << std::endl;
+    }
     return 0;
 }
