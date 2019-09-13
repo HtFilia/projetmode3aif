@@ -5,11 +5,15 @@
 #include "gtest/gtest.h"
 
 
-TEST(AbsoluteDateTestSuite, ExampleDate){
+TEST(TestSuite1, Example1){
+    EXPECT_EQ(0,0);
+}
+
+TEST(TestSuite1, Example2){
     EXPECT_EQ(0,0);
 }
 
 
-TEST(AbsoluteDateTestSuite2, IncorrectDate){
+TEST(TestSuite2, Example1){
     EXPECT_EQ(0,0);
 }
