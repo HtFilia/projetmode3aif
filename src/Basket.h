@@ -1,5 +1,5 @@
 /**
- * \file Option.h
+ * \file Basket.h
  *
  * \brief Fichier header de la classe Option
  *
@@ -55,6 +55,7 @@ public:
 	 *
 	 */
 	double payoff(const PnlMat *path) {
+	    //TODO faire les exceptions sur la taille de la matrice : (N+1)xsize
 		PnlVect lastSpots = pnl_vect_wrap_mat_row(path, getTimeSteps());
 	    return MAX(
 				pnl_vect_scalar_prod(
