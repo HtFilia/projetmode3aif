@@ -20,13 +20,13 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 
-# Detect PNL
-find_package(Pnl REQUIRED)
-set(LIBS ${LIBS} ${PNL_LIBRARIES})
-include_directories(${PNL_INCLUDE_DIRS})
-if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    add_definitions(-DPNL_RANGE_CHECK_OFF)
-endif()
+## Detect PNL
+#find_package(Pnl REQUIRED)
+#set(LIBS ${LIBS} ${PNL_LIBRARIES})
+#include_directories(${PNL_INCLUDE_DIRS})
+#if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+#    add_definitions(-DPNL_RANGE_CHECK_OFF)
+#endif()
 
 # Add math lib
 set(LIBS ${LIBS} m)
@@ -38,11 +38,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(src/3rdparty/jlparser)
 
 # Test the parser
-add_executable(test-parser src/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
-target_link_libraries(test-parser jl_parser ${LIBS})
-
-add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
-target_link_libraries(mc-example jl_parser ${LIBS})
+#add_executable(test-parser src/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
+#target_link_libraries(test-parser jl_parser ${LIBS})
+#
+#add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+#target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
@@ -52,3 +52,7 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
 else()
     message(STATUS "C++ Flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_LINKER_EXE_FLAGS}" )
 endif()
+
+
+#Add Google Tests
+add_subdirectory(Google_tests)
