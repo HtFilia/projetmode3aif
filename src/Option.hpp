@@ -1,5 +1,5 @@
 /**
- * \file Option.h
+ * \file Option.hpp
  *
  * \brief Fichier header de la classe Option
  *
