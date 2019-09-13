@@ -6,6 +6,12 @@
 # Prerequisites
 *.d
 
+# Eclipse files
+.project
+
+# Build Directory 
+build/
+
 # Compiled Object files
 *.slo
 *.lo
