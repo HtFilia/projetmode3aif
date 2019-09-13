@@ -1,5 +1,5 @@
 /**
- * \file MonteCarlo.h
+ * \file MonteCarlo.hpp
  *
  *
  * \brief Fichier header de la classe MonteCarlo.
@@ -15,8 +15,8 @@
 
 
 #include <utility>
-#include "BlackScholesModel.h"
-#include "Option.h"
+#include "BlackScholesModel.hpp"
+#include "Option.hpp"
 
 /**
  * \class MonteCarlo
