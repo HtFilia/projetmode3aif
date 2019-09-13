@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(mc-pricer CXX)
+option(BUILD_DOC "Build documentation" ON)
 
 # Prefix
 if (NOT PREFIX)
@@ -28,6 +29,14 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
 endif()
 
+# Detect Doxygen
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    add_custom_target(doc COMMAND ${DOXYGEN_EXECUTABLE} "doc/doxygen.cfg"
+            WORKING_DIRECTORY ${CMAKE_HOME_DIRECTORY}
+            COMMENT "Building user's documentation into doc build dir..."
+            )
+endif()
 # Add math lib
 set(LIBS ${LIBS} m)
 
@@ -44,7 +53,9 @@ target_link_libraries(test-parser jl_parser ${LIBS})
 add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
 target_link_libraries(mc-example jl_parser ${LIBS})
 
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp)
+# Tests Pricer
+add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
 # Print compiler flags
