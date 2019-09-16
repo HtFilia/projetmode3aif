@@ -112,5 +112,5 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(Google_Tests_run src/test1.cpp)
+add_executable(Google_Tests_run tests/test1.cpp)
 target_link_libraries(Google_Tests_run gtest gtest_main)
