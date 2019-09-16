@@ -28,7 +28,8 @@ int main(int argc, char *argv[]) {
     PnlMat* path = pnl_mat_create(N+1, d);
     int T = 10;
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    bsModel->asset(path, T, N, rng);
+    //bsModel->asset(path, T, N, rng);
+    pnl_mat_print(path);
 
     return 0;
 }
