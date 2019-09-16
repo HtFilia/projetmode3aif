@@ -1,5 +1,5 @@
 /**
- * \file Option.h
+ * \file Option.hpp
  *
  * \brief Fichier header de la classe Option
  *
@@ -22,7 +22,7 @@
 class Option {
 
 
-private:
+protected:
 
     /**
      * \brief T_ représente la maturité de l'option.

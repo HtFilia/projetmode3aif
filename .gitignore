@@ -12,6 +12,9 @@
 # Build Directory 
 build/
 
+# Doc files
+doc/html/
+
 # Compiled Object files
 *.slo
 *.lo

@@ -9,7 +9,7 @@
  *
  */
 
-#include "BlackScholesModel.h"
+#include "BlackScholesModel.hpp"
 
 /**
  * Génère une trajectoire du modèle et la stocke dans path
