@@ -103,4 +103,4 @@ endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(Google_Tests_run src/test1.cpp)
-target_link_libraries(Google_Tests_run gtest gtest_main)
+target_link_libraries(Google_Tests_run gtest gtest_main jl_parser ${LIBS})
