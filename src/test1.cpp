@@ -3,9 +3,14 @@
 //
 
 #include "gtest/gtest.h"
+#include <iostream>
+#include <stdio.h>
+#include "Basket.hpp"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_matrix.h"
 
 
-TEST(TestSuite1, Example1){
+TEST(TestPayOff, Example1){
     EXPECT_EQ(0,0);
 }
 
