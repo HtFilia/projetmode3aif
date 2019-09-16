@@ -31,7 +31,6 @@ void MonteCarlo::price(double &prix, double &ic) {
     for (int i = 0; i < nbSamples_; i++) {
         //mod_->asset(path, maturity, opt->getTimeSteps(), rng_);
         double tmp = opt_->payoff(path);
-        std::cout << "temp value : " << tmp << std::endl;
         prix += tmp;
         var += tmp * tmp;
     }
