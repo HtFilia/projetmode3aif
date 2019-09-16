@@ -1,7 +1,7 @@
 /**
- * \file testPrice0.cpp
+ * \file testAsset.cpp
  *
- * \brief Fichier test de la méthode Price en 0 pour différentes options.
+ * \brief Fichier test de la méthode Asset pour différentes options.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
  * Fait le 13.09.2019
@@ -12,9 +12,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "Basket.hpp"
-#include "Asian.hpp"
-#include "Performance.hpp"
+#include "../src/BlackScholesModel.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
@@ -30,13 +28,8 @@ int main(int argc, char *argv[]) {
     PnlMat* path = pnl_mat_create(N+1, d);
     double T = N / 252;
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-
-    PnlVect* lambda = pnl_vect_create_from_scalar(d, 1);
-    Basket* basketOption = new Basket(K, T, d, N, lambda);
-
-    MonteCarlo monteCarlo = new MonteCarlo(bsModel, basketOption, rng, fdSteps, M);
+    bsModel->asset(path, T, N, rng);
+    pnl_mat_print(path);
 
     return 0;
 }
-
-

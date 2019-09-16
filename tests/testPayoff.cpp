@@ -12,9 +12,9 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "Basket.hpp"
-#include "Asian.hpp"
-#include "Performance.hpp"
+#include "../src/Basket.hpp"
+#include "../src/Asian.hpp"
+#include "../src/Performance.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 

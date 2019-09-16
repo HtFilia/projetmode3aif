@@ -166,7 +166,7 @@ public:
         this->mod_ = mod;
         this->opt_ = opt;
         this->rng_ = rng;
-        this->fdstep_ = fdStep;
+        this->fdStep_ = fdStep;
         this->nbSamples_ = nbSamples;
     }
 

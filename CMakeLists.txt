@@ -40,6 +40,11 @@ endif()
 # Add math lib
 set(LIBS ${LIBS} m)
 
+file(GLOB SRC
+        "src/*.cpp"
+        "src/*.hpp"
+    )
+
 # Add jlparser
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -47,18 +52,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(src/3rdparty/jlparser)
 
 # Test the parser
-add_executable(test-parser src/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
+add_executable(test-parser tests/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp src/Performance.hpp src/testAsset.cpp src/testPrice0.cpp)
+add_executable(mc-example tests/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp src/Performance.hpp tests/testAsset.cpp tests/testPrice0.cpp)
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Tests Pricer
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
+add_executable(test-payoff tests/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
-add_executable(test-asset src/testAsset.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/BlackScholesModel.hpp src/BlackScholesModel.cpp)
+add_executable(test-asset tests/testAsset.cpp ${SRC})
 target_link_libraries(test-asset jl_parser ${LIBS})
+
+add_executable(test-pricer tests/testPrice0.cpp)
+target_link_libraries(test-pricer jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
