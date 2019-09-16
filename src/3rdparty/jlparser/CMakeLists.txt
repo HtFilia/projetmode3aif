@@ -19,13 +19,13 @@ target_include_directories(jl_parser INTERFACE
 target_sources(jl_parser INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp)
 target_link_libraries(jl_parser INTERFACE mpark_variant)
 
-# Detect PNL
-find_package(Pnl REQUIRED)
-set(LIBS ${LIBS} ${PNL_LIBRARIES})
-include_directories(${PNL_INCLUDE_DIRS})
-if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-    add_definitions(-DPNL_RANGE_CHECK_OFF)
-endif()
+## Detect PNL
+#find_package(Pnl REQUIRED)
+#set(LIBS ${LIBS} ${PNL_LIBRARIES})
+#include_directories(${PNL_INCLUDE_DIRS})
+#if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+#    add_definitions(-DPNL_RANGE_CHECK_OFF)
+#endif()
 
 # Add -lm -ldl if needed
 if (UNIX)
