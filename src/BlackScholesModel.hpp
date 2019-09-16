@@ -161,7 +161,7 @@ public:
      * \brief Constructeur du BSModel.
      *
      */
-    BlackScholesModel(int size, double r, int rho, PnlVect *sigma, PnlVect *spot) {
+    BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot) {
         this->size_ = size;
         this->r_ = r;
         this->rho_ = rho;
