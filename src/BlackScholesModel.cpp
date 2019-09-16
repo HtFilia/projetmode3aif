@@ -20,7 +20,12 @@
  * @param[in] nbTimeSteps nombre de dates de constatation
  */
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
-    //TODO
+    pnl_mat_set_row(path, getSpot(), 0);
+    for (int i = 1; i <= nbTimeSteps; i++) {
+        for (int j = 1; j <= getSize(); j++) {
+            pnl_mat_set(path, i, j, 1);
+        }
+    }
 }
 
 /**

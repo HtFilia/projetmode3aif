@@ -50,13 +50,15 @@ add_subdirectory(src/3rdparty/jlparser)
 add_executable(test-parser src/test_parser.cpp src/PricingResults.cpp src/PnlVectToJson.cpp)
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
+add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp src/Performance.hpp src/testAsset.cpp)
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Tests Pricer
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
-
+add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
 target_link_libraries(test-payoff jl_parser ${LIBS})
+
+add_executable(test-asset src/testAsset.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/BlackScholesModel.hpp)
+target_link_libraries(test-asset jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)

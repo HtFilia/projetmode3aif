@@ -18,7 +18,7 @@
 * @param[out] ic largeur de l'intervalle de confiance
 */
 void price(double &prix, double &ic) {
-    //TODO
+    // TODO
 }
 
 /**
