@@ -162,6 +162,14 @@ public:
         nbSamples_ = newSampleSize;
     }
 
+    MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples) {
+        this->mod_ = mod;
+        this->opt_ = opt;
+        this->rng_ = rng;
+        this->fdstep_ = fdStep;
+        this->nbSamples_ = nbSamples;
+    }
+
     /**
     * Calcule le prix de l'option à la date 0
     *
