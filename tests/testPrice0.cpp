@@ -20,6 +20,8 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
+
+    // Hardcoded parameters
     double K = 100;
     int fdSteps = 2;
     int M = 1;
@@ -27,19 +29,35 @@ int main(int argc, char *argv[]) {
     int d = 2;
     double r = 1.1;
     double rho = 0;
+    double T = N / 252;
+
+    // BlackScholesModel Init
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
 
+    // Spots Path Init
     PnlMat* path = pnl_mat_create(N+1, d);
-    double T = N / 252;
+
+    // RNG Init
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
 
-    PnlVect* lambda = pnl_vect_create_from_scalar(d, 1);
-    Basket* basketOption = new Basket(K, T, d, N, lambda);
+    // Lambda setters for Option Init
+    PnlVect* lambda = pnl_vect_create_from_scalar(d, 1/d);
 
-    MonteCarlo* monteCarlo = new MonteCarlo(bsModel, basketOption, rng, fdSteps, M);
-    
+    // Option Init
+    Basket* basketAverageOption = new Basket(K, T, d, N, lambda);
+
+    // Monte Carlo Init
+    MonteCarlo* monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
+    double price = 0;
+    double ic = 0;
+
+    // Test Pricer en 0
+    monteCarlo->price(price, ic);
+    std::cout << "Prix en 0 : " << price << std::endl;
+    std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
+
     return 0;
 }
 
