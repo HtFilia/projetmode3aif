@@ -21,13 +21,13 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 
-## Detect PNL
-#find_package(Pnl REQUIRED)
-#set(LIBS ${LIBS} ${PNL_LIBRARIES})
-#include_directories(${PNL_INCLUDE_DIRS})
-#if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-#    add_definitions(-DPNL_RANGE_CHECK_OFF)
-#endif()
+# Detect PNL
+find_package(Pnl REQUIRED)
+set(LIBS ${LIBS} ${PNL_LIBRARIES})
+include_directories(${PNL_INCLUDE_DIRS})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    add_definitions(-DPNL_RANGE_CHECK_OFF)
+endif()
 
 # Detect Doxygen
 find_package(Doxygen)
@@ -37,6 +37,7 @@ if(DOXYGEN_FOUND)
             COMMENT "Building user's documentation into doc build dir..."
             )
 endif()
+
 # Add math lib
 set(LIBS ${LIBS} m)
 
@@ -54,7 +55,7 @@ add_executable(mc-example src/mc_example.cpp src/PricingResults.cpp src/PnlVectT
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Tests Pricer
-add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.h)
+add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp)
 
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
