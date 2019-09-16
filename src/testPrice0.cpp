@@ -20,7 +20,21 @@
 
 int main(int argc, char *argv[]) {
     int N = 1;
-    int M = 10;
+    int d = 2;
+    double r = 1.1;
+    double rho = 0;
+    PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
+    PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
+    BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
+
+    PnlMat* path = pnl_mat_create(N+1, d);
+    double T = N / 252;
+    PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+
+    PnlVect* lambda = pnl_vect_create_from_scalar(d, 1);
+    Basket* basketOption = new Basket(K, T, d, N, lambda);
+
+    MonteCarlo monteCarlo = new MonteCarlo(bsModel, basketOption, rng, fdSteps, M);
 
     return 0;
 }

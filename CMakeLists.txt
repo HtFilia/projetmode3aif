@@ -57,7 +57,7 @@ target_link_libraries(mc-example jl_parser ${LIBS})
 add_executable(test-payoff src/testPayoff.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/Basket.hpp src/Asian.hpp)
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
-add_executable(test-asset src/testAsset.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/BlackScholesModel.hpp)
+add_executable(test-asset src/testAsset.cpp src/PricingResults.cpp src/PnlVectToJson.cpp src/BlackScholesModel.hpp src/BlackScholesModel.cpp)
 target_link_libraries(test-asset jl_parser ${LIBS})
 
 # Print compiler flags
