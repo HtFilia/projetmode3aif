@@ -15,8 +15,12 @@
 
 
 #include <utility>
+
 #include "BlackScholesModel.hpp"
 #include "Option.hpp"
+#include "pnl/pnl_matrix.h"
+#include "pnl/pnl_vector.h"
+#include "pnl/pnl_mathtools.h"
 
 /**
  * \class MonteCarlo
@@ -160,6 +164,14 @@ public:
      */
     void setSampleSize(int newSampleSize) {
         nbSamples_ = newSampleSize;
+    }
+
+    MonteCarlo(BlackScholesModel *mod, Option *opt, PnlRng *rng, double fdStep, int nbSamples) {
+        this->mod_ = mod;
+        this->opt_ = opt;
+        this->rng_ = rng;
+        this->fdStep_ = fdStep;
+        this->nbSamples_ = nbSamples;
     }
 
     /**

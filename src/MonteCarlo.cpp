@@ -9,6 +9,9 @@
  *
  */
 
+#include <math.h>
+#include <iostream>
+
 #include "MonteCarlo.hpp"
 
 /**
@@ -17,8 +20,27 @@
 * @param[out] prix valeur de l'estimateur Monte Carlo
 * @param[out] ic largeur de l'intervalle de confiance
 */
-void price(double &prix, double &ic) {
-    //TODO
+void MonteCarlo::price(double &prix, double &ic) {
+    double interestRate = mod_->getR();
+    double maturity = opt_->getMaturity();
+    PnlMat* path = pnl_mat_create_from_scalar(opt_->getTimeSteps() + 1, mod_->getSize(), 100);
+    pnl_mat_print(path);
+    prix = 0;
+    double var = 0;
+
+    for (int i = 0; i < nbSamples_; i++) {
+        //mod_->asset(path, maturity, opt->getTimeSteps(), rng_);
+        double tmp = opt_->payoff(path);
+        prix += tmp;
+        var += tmp * tmp;
+    }
+
+    prix /= nbSamples_;
+    var = var / nbSamples_ - prix * prix;
+    var *= exp(-2 * maturity * interestRate);
+
+    ic = 2 * 1,96 * sqrt(var / nbSamples_);
+    prix *= exp(-maturity * interestRate);
 }
 
 /**
@@ -31,7 +53,7 @@ void price(double &prix, double &ic) {
  * @param[out] ic contient la largeur de l'intervalle
  * de confiance sur le calcul du prix
  */
-void price(const PnlMat *past, double t, double &prix, double &ic) {
+void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
     //TODO
 }
 
@@ -45,6 +67,6 @@ void price(const PnlMat *past, double t, double &prix, double &ic) {
  * @param[out] ic contient la largeur de l'intervalle
  * de confiance sur le calcul du delta
  */
-void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic) {
+void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic) {
     //TODO
 }
