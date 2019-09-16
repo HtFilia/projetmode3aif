@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include <stdio.h>
-
 #include "../src/MonteCarlo.hpp"
 #include "../src/Basket.hpp"
 #include "../src/Asian.hpp"
@@ -20,7 +19,6 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
-
     // Hardcoded parameters
     double K = 100;
     int fdSteps = 2;
@@ -35,7 +33,7 @@ int main(int argc, char *argv[]) {
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
-
+  
     // Spots Path Init
     PnlMat* path = pnl_mat_create(N+1, d);
 

@@ -40,6 +40,9 @@ endif()
 
 # Add math lib
 set(LIBS ${LIBS} m)
+file(GLOB SRC
+        "src/*.hpp"
+        "src/*.cpp")
 
 file(GLOB SRC
         "src/*.hpp"
