@@ -46,6 +46,10 @@ public:
 		this->lambda_ = lambda;
 	}
 
+	~Basket(){
+	    pnl_vect_free(&lambda_);
+	}
+
 	/**
 	 * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
 	 *

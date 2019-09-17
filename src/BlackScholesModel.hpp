@@ -169,6 +169,11 @@ public:
         this->spot_ = spot;
     }
 
+    ~BlackScholesModel(){
+        pnl_vect_free(&sigma_);
+        pnl_vect_free(&spot_);
+    }
+
     /**
      * Génère une trajectoire du modèle et la stocke dans path
      *

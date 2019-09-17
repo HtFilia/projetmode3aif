@@ -174,6 +174,11 @@ public:
         this->nbSamples_ = nbSamples;
     }
 
+    ~MonteCarlo(){
+        free(opt_);
+        pnl_rng_free(&rng_);
+    }
+
     /**
     * Calcule le prix de l'option à la date 0
     *

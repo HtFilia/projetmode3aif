@@ -40,6 +40,13 @@ public:
     }
 
     /**
+     * Libère le lambda_ de l'objet
+     */
+    ~Performance(){
+        pnl_vect_free(&lambda_);
+    }
+
+    /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
      *
      * @param[out] path le marché contenant les spots des sous-jacents
