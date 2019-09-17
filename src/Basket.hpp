@@ -11,6 +11,7 @@
 #ifndef PROJETMODPRO_BASKET_H
 #define PROJETMODPRO_BASKET_H
 
+#include "iostream"
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
@@ -55,16 +56,18 @@ public:
 	 *
 	 */
 	double payoff(const PnlMat *path) {
-	    //TODO faire les exceptions sur la taille de la matrice : (N+1)xsize
-		PnlVect lastSpots = pnl_vect_wrap_mat_row(path, getTimeSteps());
-	    return MAX(
-				pnl_vect_scalar_prod(
-				        lambda_,
-				        &lastSpots)
-				- K_,
-				0);
-	}
-
+        if (path->m != getTimeSteps() + 1) {
+            throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
+        } else if (path->n != getSize()) {
+            throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
+        } else {
+            PnlVect *lastSpots = pnl_vect_new();
+            pnl_mat_get_row(lastSpots, path, getTimeSteps());
+            double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);
+            pnl_vect_free(&lastSpots);
+            return res;
+        }
+    }
 };
 
 #endif //PROJETMODPRO_BASKET_H

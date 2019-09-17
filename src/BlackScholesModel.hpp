@@ -158,6 +158,18 @@ public:
     }
 
     /**
+     * \brief Constructeur du BSModel.
+     *
+     */
+    BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot) {
+        this->size_ = size;
+        this->r_ = r;
+        this->rho_ = rho;
+        this->sigma_ = sigma;
+        this->spot_ = spot;
+    }
+
+    /**
      * Génère une trajectoire du modèle et la stocke dans path
      *
      * @param[out] path contient une trajectoire du modèle.

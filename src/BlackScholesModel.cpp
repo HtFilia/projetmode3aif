@@ -10,6 +10,7 @@
  */
 
 #include "BlackScholesModel.hpp"
+#include "math.h"
 
 /**
  * Génère une trajectoire du modèle et la stocke dans path
@@ -20,7 +21,37 @@
  * @param[in] nbTimeSteps nombre de dates de constatation
  */
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
-    //TODO
+    // Calcul de L
+    PnlMat* L = pnl_mat_create_from_scalar(getSize(), getSize(), getRho());
+    for (int d = 0; d < getSize(); d++) {
+        pnl_mat_set(L, d, d, 1);
+    }
+    pnl_mat_chol(L);
+
+    // Calcul de G
+    PnlMat* G = pnl_mat_create(nbTimeSteps, getSize());
+    pnl_mat_rng_normal(G, nbTimeSteps, getSize(), rng);
+
+    // On copie les spots sur le marché
+    pnl_mat_set_row(path, getSpot(), 0);
+
+    PnlVect* L_j = pnl_vect_create(getSize());
+    PnlVect* G_i = pnl_vect_create(getSize());
+
+    // Pour chaque temps
+    for (int i = 1; i <= nbTimeSteps; i++) {
+        // Calcul de G_i
+        pnl_mat_get_row(G_i, G, i - 1);
+
+        // Pour chaque spot
+        for (int j = 0; j < getSize(); j++) {
+            double vol = GET(getSigma(), j);
+            pnl_mat_get_row(L_j, L, j);
+            double exposant = (getR() - SQR(vol) / 2) * T / nbTimeSteps + vol * sqrt(T / nbTimeSteps) * pnl_vect_scalar_prod(L_j, G_i);
+            pnl_mat_set(path, i, j, pnl_mat_get(path, i - 1, j) * exp(exposant));
+        }
+    }
+    pnl_mat_free(&L);
 }
 
 /**
