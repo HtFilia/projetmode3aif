@@ -32,5 +32,12 @@ int main(int argc, char *argv[]) {
     bsModel->asset(path, T, N, rng);
     pnl_mat_print(path);
 
+    //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    delete bsModel;
+    pnl_mat_free(&path);
+    pnl_rng_free(&rng);
+
     return 0;
 }

@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
 
     //free
     pnl_vect_free(&lambda);
-    free(basketOption);
-    free(asianOption);
-    free(performanceOption);
+    delete basketOption;
+    delete asianOption;
+    delete performanceOption;
     pnl_mat_free(&path);
     return 0;
 }

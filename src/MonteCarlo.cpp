@@ -41,6 +41,9 @@ void MonteCarlo::price(double &prix, double &ic) {
 
     ic = 2 * 1,96 * sqrt(var / nbSamples_);
     prix *= exp(-maturity * interestRate);
+
+    //free
+    pnl_mat_free(&path);
 }
 
 /**

@@ -56,6 +56,16 @@ int main(int argc, char *argv[]) {
     std::cout << "Prix en 0 : " << price << std::endl;
     std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
 
+    //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    delete bsModel;
+    pnl_mat_free(&path);
+    pnl_rng_free(&rng);
+    pnl_vect_free(&lambda);
+    delete basketAverageOption;
+    delete monteCarlo;
+
     return 0;
 }
 

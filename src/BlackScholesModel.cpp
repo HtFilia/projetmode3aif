@@ -51,7 +51,12 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
             pnl_mat_set(path, i, j, pnl_mat_get(path, i - 1, j) * exp(exposant));
         }
     }
+
+    //free
+    pnl_vect_free(&G_i);
+    pnl_vect_free(&L_j);
     pnl_mat_free(&L);
+    pnl_mat_free(&G);
 }
 
 /**

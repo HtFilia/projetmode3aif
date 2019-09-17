@@ -40,11 +40,9 @@ public:
     }
 
     /**
-     * Libère le lambda_ de l'objet
+     * Destructeur
      */
-    ~Performance(){
-        pnl_vect_free(&lambda_);
-    }
+    ~Performance(){}
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
