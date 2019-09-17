@@ -44,14 +44,14 @@ TEST(Payoff, ExampleParsing)
     }
     P->extract("strike", strike);
     P->extract("sample number", n_samples);
-    P->extract("payoff coefficients", payoff_coefficients, 1);
+    P->extract("payoff coefficients", payoff_coefficients, size);
     Basket* basketOption = new Basket(strike, T, size, n_samples, payoff_coefficients);
-    PnlMat* path = pnl_mat_create_from_scalar(2, 1, 110);
-    cout << basketOption->payoff(path) << endl;
+    PnlMat* path = pnl_mat_create_from_scalar(n_samples+1, size, 2000);
+    EXPECT_EQ(1900, basketOption->payoff(path));
+//    cout << a << endl;
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
     pnl_vect_free(&divid);
-
     delete P;
 }
 

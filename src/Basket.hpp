@@ -16,6 +16,8 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
 
+using namespace std;
+
 class Basket: public Option {
 
 private:
@@ -64,7 +66,7 @@ public:
             PnlVect *lastSpots = pnl_vect_new();
             pnl_mat_get_row(lastSpots, path, getTimeSteps());
             double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);
-            pnl_vect_free(&lastSpots);
+//            pnl_vect_free(&lastSpots);
             return res;
         }
     }
