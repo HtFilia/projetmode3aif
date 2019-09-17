@@ -38,12 +38,12 @@ TEST(Payoff, ExampleParsing)
     P->extract("spot", spot, size);
     P->extract("volatility", sigma, size);
     P->extract("interest rate", r);
-    if (P->extract("dividend rate", divid, size, true) == false)
+    if (!P->extract("dividend rate", divid, size, true))
     {
         divid = pnl_vect_create_from_zero(size);
     }
     P->extract("strike", strike);
-    P->extract("sample number", n_samples);
+    P->extract("hedging dates number", nbTimeSteps);
     P->extract("payoff coefficients", payoff_coefficients, size);
     Basket* basketOption = new Basket(strike, T, size, nbTimeSteps, payoff_coefficients);
     PnlMat* path = pnl_mat_create_from_scalar(nbTimeSteps+1, size, 2000);
@@ -75,7 +75,7 @@ TEST(Payoff, ExampleParsing2)
     P->extract("spot", spot, size);
     P->extract("volatility", sigma, size);
     P->extract("interest rate", r);
-    if (P->extract("dividend rate", divid, size, true) == false)
+    if (!P->extract("dividend rate", divid, size, true))
     {
         divid = pnl_vect_create_from_zero(size);
     }
