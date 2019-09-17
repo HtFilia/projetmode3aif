@@ -138,7 +138,7 @@ void Parser::ReadInputFile(const char *InputFile)
 
   if ((fic = fopen(InputFile, "r")) == NULL)
     {
-      printf("Unable to open Input File %s\n", InputFile);
+      printf("Unable to open Input File \"%s\"\n", InputFile);
       exit(1);
     }
 
