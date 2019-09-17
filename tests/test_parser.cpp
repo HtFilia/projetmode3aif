@@ -11,9 +11,11 @@ int main(int argc, char **argv)
     string type;
     int size;
     size_t n_samples;
-
     char *infile = argv[1];
+    cerr << infile << endl;
     Param *P = new Parser(infile);
+    cerr << "ccc" << endl;
+
 
     P->extract("option type", type);
     P->extract("maturity", T);
