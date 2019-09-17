@@ -22,8 +22,11 @@ endif ()
 
 
 # Detect PNL
+set(Pnl_DIR "/matieres/5MMPMP6/pnl/src")
 find_package(Pnl REQUIRED)
+set(PNL_LIBRARIES "/matieres/5MMPMP6/pnl/src/libpnl.so")
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
+set(PNL_INCLUDE_DIRS "/matieres/5MMPMP6/pnl/include")
 include_directories(${PNL_INCLUDE_DIRS})
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
@@ -115,5 +118,5 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(Google_Tests_run tests/test1.cpp)
-target_link_libraries(Google_Tests_run gtest gtest_main)
+add_executable(Google_Tests_run tests/test1.cpp src/Basket.hpp)
+target_link_libraries(Google_Tests_run gtest gtest_main jl_parser ${LIBS})
