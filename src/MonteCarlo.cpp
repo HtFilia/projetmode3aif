@@ -23,13 +23,12 @@
 void MonteCarlo::price(double &prix, double &ic) {
     double interestRate = mod_->getR();
     double maturity = opt_->getMaturity();
-    PnlMat* path = pnl_mat_create_from_scalar(opt_->getTimeSteps() + 1, mod_->getSize(), 100);
-    pnl_mat_print(path);
+    PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
     prix = 0;
     double var = 0;
 
     for (int i = 0; i < nbSamples_; i++) {
-        //mod_->asset(path, maturity, opt->getTimeSteps(), rng_);
+        mod_->asset(path, maturity, opt_->getTimeSteps(), rng_);
         double tmp = opt_->payoff(path);
         prix += tmp;
         var += tmp * tmp;
@@ -38,8 +37,7 @@ void MonteCarlo::price(double &prix, double &ic) {
     prix /= nbSamples_;
     var = var / nbSamples_ - prix * prix;
     var *= exp(-2 * maturity * interestRate);
-
-    ic = 2 * 1,96 * sqrt(var / nbSamples_);
+    ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
     prix *= exp(-maturity * interestRate);
 }
 

@@ -9,6 +9,7 @@
  *
  */
 
+#include <iostream>
 #include "BlackScholesModel.hpp"
 #include "math.h"
 
@@ -21,6 +22,7 @@
  * @param[in] nbTimeSteps nombre de dates de constatation
  */
 void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *rng) {
+
     // Calcul de L
     PnlMat* L = pnl_mat_create_from_scalar(getSize(), getSize(), getRho());
     for (int d = 0; d < getSize(); d++) {
@@ -31,7 +33,6 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     // Calcul de G
     PnlMat* G = pnl_mat_create(nbTimeSteps, getSize());
     pnl_mat_rng_normal(G, nbTimeSteps, getSize(), rng);
-
     // On copie les spots sur le marché
     pnl_mat_set_row(path, getSpot(), 0);
 
