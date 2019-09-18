@@ -12,9 +12,9 @@
 #ifndef PROJETMODPRO_BLACKSCHOLESMODEL_H
 #define PROJETMODPRO_BLACKSCHOLESMODEL_H
 
-#include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "pnl/pnl_random.h"
 
 /**
  * \class BlackScholesModel

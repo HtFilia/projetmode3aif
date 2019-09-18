@@ -1,13 +1,12 @@
 /**
- * \file testPrice0.cpp
+ * \file testPriceT.cpp
  *
- * \brief Fichier test de la méthode Price en 0 pour différentes options.
+ * \brief Fichier test de la méthode Price en t pour différentes options.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
- * Fait le 13.09.2019
+ * Fait le 18.09.2019
  *
  */
-
 
 #include <iostream>
 #include <stdio.h>
@@ -23,12 +22,14 @@ int main(int argc, char *argv[]) {
     // Hardcoded parameters
     double K = 100;
     int fdSteps = 2;
-    int M = 100000;
+    int M = 10000;
     int N = 100;
+    int NPast = 50;
     int d = 5;
     double r = 0.05;
     double rho = 0;
-    double T = 0.5;
+    double T = 1;
+    double t = T * (NPast + 0.5) / N;
     PnlVect* lambda = pnl_vect_create_from_scalar(d, 0.2);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
@@ -38,35 +39,28 @@ int main(int argc, char *argv[]) {
 
     // BSModel Init
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
-  
+
     // Market Path Init
     PnlMat* path = pnl_mat_create(N+1, d);
 
     // RNG Init
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
+    pnl_rng_sseed(rng, 1);
 
     // Monte Carlo Init
-    MonteCarlo* monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
+    MonteCarlo *monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
     double price = 0;
     double ic = 0;
 
-    // Test Pricer en 0
-    monteCarlo->price(price, ic);
-    std::cout << "Prix en 0 : " << price << std::endl;
-    std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
+    // Past Market Init (to t_i)
+    PnlMat* past = pnl_mat_create(NPast + 2, d);
+    bsModel->asset(past, t, NPast + 1, rng);
+    pnl_rng_sseed(rng, time(NULL));
 
-    //free
-    pnl_vect_free(&sigma);
-    pnl_vect_free(&spot);
-    delete bsModel;
-    pnl_mat_free(&path);
-    pnl_rng_free(&rng);
-    pnl_vect_free(&lambda);
-    delete basketAverageOption;
-    delete monteCarlo;
+    // Test Pricer en t
+    monteCarlo->price(past, t, price, ic);
+    std::cout << "Prix en t : " << price << std::endl;
+    std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
 
     return 0;
 }
-
-
