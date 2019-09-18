@@ -22,15 +22,14 @@ int main(int argc, char *argv[]) {
     // Hardcoded parameters
     double K = 100;
     int fdSteps = 2;
-    int M = 100000;
-    int N = 10;
-    int NPast = 5;
+    int M = 10000;
+    int N = 100;
+    int NPast = 50;
     int d = 5;
     double r = 0.05;
     double rho = 0;
     double T = 1;
-    double t = 0.7;
-    double TPast = T / N * NPast;
+    double t = T * (NPast + 0.5) / N;
     PnlVect* lambda = pnl_vect_create_from_scalar(d, 0.2);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
@@ -46,17 +45,17 @@ int main(int argc, char *argv[]) {
 
     // RNG Init
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
+    pnl_rng_sseed(rng, 1);
 
     // Monte Carlo Init
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
     double price = 0;
     double ic = 0;
 
-    // Past Market Init
-    PnlMat* past = pnl_mat_create(NPast + 1, d);
-    bsModel->asset(past, TPast, NPast, rng);
-    pnl_mat_print(past);
+    // Past Market Init (to t_i)
+    PnlMat* past = pnl_mat_create(NPast + 2, d);
+    bsModel->asset(past, t, NPast + 1, rng);
+    pnl_rng_sseed(rng, time(NULL));
 
     // Test Pricer en t
     monteCarlo->price(past, t, price, ic);

@@ -67,9 +67,9 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
 
     prix /= nbSamples_;
     var = var / nbSamples_ - prix * prix;
-    var *= exp(-2 * maturity * interestRate);
+    var *= exp(-2 * (maturity - t) * interestRate);
     ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
-    prix *= exp(-maturity * interestRate);
+    prix *= exp(-(maturity - t) * interestRate);
 }
 
 /**

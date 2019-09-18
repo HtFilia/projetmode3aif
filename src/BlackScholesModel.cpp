@@ -88,7 +88,7 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 
     // Calcul des spots en t_(i+1) en fonction de ceux en t
     pnl_mat_get_row(G_i, G, 0);
-    double delta_t = (past->m - 1) * T / nbTimeSteps - t;
+    double delta_t = ((past->m - 1) * T / nbTimeSteps) - t;
     for (int j = 0; j < getSize(); j++) {
         double vol = GET(getSigma(), j);
         pnl_mat_get_row(L_j, L, j);
