@@ -3,12 +3,14 @@
 //
 
 #include <string>
+#include <sstream>
 
 #include "gtest/gtest.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "jlparser/parser.hpp"
 #include "../src/Basket.hpp"
+#include "../src/MonteCarlo.hpp"
 
 
 using namespace std;
@@ -91,6 +93,45 @@ TEST(Payoff, ExampleParsing2)
     pnl_vect_free(&sigma);
     pnl_vect_free(&divid);
     delete P;
+}
+
+TEST(DisplayOption, Basket)
+{
+    double T, r, strike;
+    PnlVect *spot, *sigma, *divid, *payoff_coefficients;
+    string type;
+    int size;
+    int nbTimeSteps;
+    string str = "../data/produits/basket_1.dat";
+    const char *infile = str.c_str();
+    Param *P = new Parser(infile);
+
+    P->extract("option type", type);
+    P->extract("maturity", T);
+    P->extract("option size", size);
+    P->extract("spot", spot, size);
+    P->extract("volatility", sigma, size);
+    P->extract("interest rate", r);
+    P->extract("strike", strike);
+    P->extract("hedging dates number", nbTimeSteps);
+    P->extract("payoff coefficients", payoff_coefficients, size);
+    Basket* basketOption = new Basket(strike, T, size, nbTimeSteps, payoff_coefficients);
+
+    // test display
+    basketOption->RedirectToFile("genOption.dat");
+    double strike2;
+    Param *P2 = new Parser("genOption.dat");
+    P2->extract("strike", strike2);
+    EXPECT_EQ(strike2, strike);
+    double T2;
+    P2->extract("maturity", T2);
+    EXPECT_EQ(T, T2);
+    //    cout << a << endl;
+    pnl_vect_free(&spot);
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&divid);
+    delete P;
+    delete P2;
 }
 
 

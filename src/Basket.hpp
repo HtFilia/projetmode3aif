@@ -12,9 +12,13 @@
 #define PROJETMODPRO_BASKET_H
 
 #include "iostream"
+#include "fstream"
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
+
+using namespace std;
+
 
 class Basket: public Option {
 
@@ -70,6 +74,41 @@ public:
             return res;
         }
     }
+    /**
+ * Redirect the file at the wanted place in a .dat format
+ */
+    void RedirectToFile(const std::string path){
+        fstream file;
+        file.open(path, ios::out);
+        string line;
+
+        // Backup streambuffers of cout
+        streambuf* stream_buffer_cout = cout.rdbuf();
+        streambuf* stream_buffer_cin = cin.rdbuf();
+
+        // Get the streambuffer of the file
+        streambuf* stream_buffer_file = file.rdbuf();
+
+        // Redirect cout to file
+        cout.rdbuf(stream_buffer_file);
+
+        cout << "model type                   <string>     bs" << std::endl;
+
+        cout << "maturity                     <float>      " << getMaturity() << std::endl;
+        cout << "option size                  <int>        " << getSize() << std::endl;
+        cout << "strike                       <float>      " << K_ << std::endl;
+        cout << "option type                  <string>     basket" << std::endl;
+        double payoffcoeff = 1/size_; //TODO
+        cout << "payoff coefficients       <vector>     " << payoffcoeff << std::endl;
+        cout << "attention le payoff coeff  = 1/size_, répart égale => bizarre" << std::endl;
+        cout << "timestep number              <int>        " << nbTimeSteps_ << std::endl;
+
+        // Redirect cout back to screen
+        cout.rdbuf(stream_buffer_cout);
+
+        file.close();
+    }
 };
+
 
 #endif //PROJETMODPRO_BASKET_H
