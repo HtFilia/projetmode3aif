@@ -46,6 +46,17 @@ public:
 		this->lambda_ = lambda;
 	}
 
+	Basket(const char *InputFile) {
+	    Parser *P = new Parser(InputFile);
+	    int size;
+        P->extract("maturity", this->T_);
+        P->extract("option size", size);
+        this->size_ = size;
+        P->extract("strike", this->K_);
+        P->extract("hedging dates number", this->nbTimeSteps_);
+        P->extract("payoff coefficients", this->lambda_, size);
+	}
+
 	~Basket(){}
 
 	/**

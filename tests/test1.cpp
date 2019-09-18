@@ -9,11 +9,13 @@
 #include "pnl/pnl_matrix.h"
 #include "jlparser/parser.hpp"
 #include "../src/Basket.hpp"
+#include "../src/Asian.hpp"
+#include "../src/Performance.hpp"
 
 
 using namespace std;
 
-TEST(Payoff, Example1)
+TEST(Payoff, ExampleHard)
 {
     PnlVect* lambda = pnl_vect_create_from_scalar(1, 1);
     Basket* basketOption = new Basket(100, 10, 1, 1, lambda);
@@ -21,78 +23,43 @@ TEST(Payoff, Example1)
     EXPECT_EQ(10,basketOption->payoff(path));
 }
 
-TEST(Payoff, ExampleParsing)
+TEST(Payoff, ExampleParsingOption)
 {
-    double T, r, strike;
-    PnlVect *spot, *sigma, *divid, *payoff_coefficients;
-    string type;
-    int size, nbTimeSteps;
-    size_t n_samples;
-
-    string str = "../data/produits/basket.dat";
-    const char *infile = str.c_str();
-    Param *P = new Parser(infile);
-
-    P->extract("option type", type);
-    P->extract("maturity", T);
-    P->extract("option size", size);
-    P->extract("spot", spot, size);
-    P->extract("volatility", sigma, size);
-    P->extract("interest rate", r);
-    if (!P->extract("dividend rate", divid, size, true))
-    {
-        divid = pnl_vect_create_from_zero(size);
-    }
-    P->extract("strike", strike);
-    P->extract("hedging dates number", nbTimeSteps);
-    P->extract("payoff coefficients", payoff_coefficients, size);
-    Basket* basketOption = new Basket(strike, T, size, nbTimeSteps, payoff_coefficients);
-    PnlMat* path = pnl_mat_create_from_scalar(nbTimeSteps+1, size, 2000);
-    EXPECT_EQ(1900, basketOption->payoff(path));
-//    cout << a << endl;
-    pnl_vect_free(&spot);
-    pnl_vect_free(&sigma);
-    pnl_vect_free(&divid);
-    delete P;
-}
-
-
-
-TEST(Payoff, ExampleParsing2)
-{
-    double T, r, strike;
-    PnlVect *spot, *sigma, *divid, *payoff_coefficients;
-    string type;
-    int size;
-    int nbTimeSteps;
-
     string str = "../data/produits/basket_1.dat";
     const char *infile = str.c_str();
-    Param *P = new Parser(infile);
-
-    P->extract("option type", type);
-    P->extract("maturity", T);
-    P->extract("option size", size);
-    P->extract("spot", spot, size);
-    P->extract("volatility", sigma, size);
-    P->extract("interest rate", r);
-    if (!P->extract("dividend rate", divid, size, true))
-    {
-        divid = pnl_vect_create_from_zero(size);
-    }
-    P->extract("strike", strike);
-    P->extract("hedging dates number", nbTimeSteps);
-    P->extract("payoff coefficients", payoff_coefficients, size);
-    Basket* basketOption = new Basket(strike, T, size, nbTimeSteps, payoff_coefficients);
-    PnlMat* path = pnl_mat_create_from_file("../data/market-data/simul_basket_1.dat");
-    EXPECT_NEAR(3.79564, basketOption->payoff(path), 0.01);
-//    cout << a << endl;
-    pnl_vect_free(&spot);
-    pnl_vect_free(&sigma);
-    pnl_vect_free(&divid);
-    delete P;
+    Basket* basketOption = new Basket(infile);
+    PnlMat* path = pnl_mat_create_from_scalar(basketOption->getTimeSteps()+1, basketOption->getSize(), 2000);
+    EXPECT_EQ(1900, basketOption->payoff(path));
 }
 
+
+TEST(Payoff, ExampleParsingBasket)
+{
+    string str = "../data/produits/basket_1.dat";
+    const char *infile = str.c_str();
+    Basket* basketOption = new Basket(infile);
+    PnlMat* path = pnl_mat_create_from_file("../data/market-data/simul_basket_1.dat");
+    EXPECT_NEAR(3.79564, basketOption->payoff(path), 0.01);
+}
+
+
+TEST(Payoff, ExampleParsingAsian)
+{
+    string str = "../data/produits/asian.dat";
+    const char *infile = str.c_str();
+    Asian* asianOption = new Asian(infile);
+    PnlMat* path = pnl_mat_create_from_file("../data/market-data/simul_asian.dat");
+    EXPECT_NEAR(0, asianOption->payoff(path), 0.01);
+}
+
+TEST(Payoff, ExampleParsingPerf)
+{
+    string str = "../data/produits/perf.dat";
+    const char *infile = str.c_str();
+    Performance* perfOption = new Performance(infile);
+    PnlMat* path = pnl_mat_create_from_file("../data/market-data/simul_perf.dat");
+    EXPECT_NEAR(1.88337, perfOption->payoff(path), 0.01);
+}
 
 
 TEST(MonteCarlo, Example1)

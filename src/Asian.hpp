@@ -11,6 +11,7 @@
 #ifndef PROJETMODPRO_ASIAN_H
 #define PROJETMODPRO_ASIAN_H
 
+#include <jlparser/parser.hpp>
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
@@ -43,6 +44,17 @@ public:
         this->nbTimeSteps_ = nbTimeSteps;
         this->K_ = strike;
         this->lambda_ = lambda;
+    }
+
+    Asian(const char *InputFile) {
+        Parser *P = new Parser(InputFile);
+        int size;
+        P->extract("maturity", this->T_);
+        P->extract("option size", size);
+        this->size_ = size;
+        P->extract("strike", this->K_);
+        P->extract("hedging dates number", this->nbTimeSteps_);
+        P->extract("payoff coefficients", this->lambda_, size);
     }
 
     ~Asian(){}
