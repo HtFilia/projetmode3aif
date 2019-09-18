@@ -15,6 +15,7 @@
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
+#include "jlparser/parser.hpp"
 
 class Basket: public Option {
 
