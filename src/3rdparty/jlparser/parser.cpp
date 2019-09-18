@@ -180,6 +180,7 @@ void Parser::ReadInputFile(const char *InputFile)
           break;
         }
     }
+    std::cerr << "test" << std::endl;
   fclose(fic);
 }
 
