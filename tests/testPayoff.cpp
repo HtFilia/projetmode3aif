@@ -20,6 +20,8 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
+
+    // Hardcoded Parameters
     int N = 100;
     int d = 5;
     double T = 0.5;
@@ -35,17 +37,16 @@ int main(int argc, char *argv[]) {
     pnl_rng_sseed(rng, time(NULL));
 
     // Market simulation
-    BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
+    BlackScholesModel* bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
     PnlMat* path = pnl_mat_create(N+1, d);
     bsModel->asset(path, T, N, rng);
-    pnl_mat_print(path);
 
-    // Création des options
+    // Options Init
     Basket* basketOption = new Basket(K, T, d, N, lambda);
     Asian* asianOption = new Asian(K, T, d, N, lambda);
     Performance* performanceOption = new Performance(T, d, N, lambda);
 
-    // Calcul et affichage des payoffs
+    // Print payoffs
     std::cout << "Payoff du basket : " << basketOption->payoff(path) << std::endl;
     std::cout << "Payoff de l'asian : " << asianOption->payoff(path) << std::endl;
     std::cout << "Payoff du performance : " << performanceOption->payoff(path) << std::endl;
