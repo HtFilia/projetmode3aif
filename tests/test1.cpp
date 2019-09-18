@@ -62,6 +62,21 @@ TEST(Payoff, ExampleParsingPerf)
 }
 
 
+TEST(Display, Example)
+{
+    string str = "../data/produits/basket_1.dat";
+    const char *infile = str.c_str();
+    Basket* basketOption = new Basket(infile);
+    string strout = "../data/produits/output.dat";
+    const char *outfile = strout.c_str();
+    basketOption->RedirectToFile(outfile);
+    Basket* basketOption2 = new Basket(outfile);
+    EXPECT_EQ(basketOption->getSize(), basketOption2->getSize());
+    EXPECT_EQ(basketOption->getTimeSteps(), basketOption2->getTimeSteps());
+    EXPECT_EQ(basketOption->getMaturity(), basketOption2->getMaturity());
+}
+
+
 TEST(MonteCarlo, Example1)
 {
     EXPECT_EQ(0,0);

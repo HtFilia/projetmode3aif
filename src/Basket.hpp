@@ -11,11 +11,15 @@
 #ifndef PROJETMODPRO_BASKET_H
 #define PROJETMODPRO_BASKET_H
 
+#include <fstream>
+
 #include "iostream"
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
 #include "jlparser/parser.hpp"
+
+using namespace std;
 
 class Basket: public Option {
 
@@ -54,7 +58,7 @@ public:
         P->extract("option size", size);
         this->size_ = size;
         P->extract("strike", this->K_);
-        P->extract("hedging dates number", this->nbTimeSteps_);
+        P->extract("timestep number", this->nbTimeSteps_);
         P->extract("payoff coefficients", this->lambda_, size);
 	}
 
@@ -81,6 +85,22 @@ public:
             pnl_vect_free(&lastSpots);
             return res;
         }
+    }
+
+    void RedirectToFile(const char *path){
+        ofstream file;
+        file.open(path);
+        file << "model type                   <string>     bs\n";
+        file << "maturity                     <float>      " << getMaturity() << "\n";
+        file << "option size                  <int>        " << getSize() << "\n";
+        file << "strike                       <float>      " << K_ << "\n";
+        file << "option type                  <string>     basket" << "\n";
+        double payoffcoeff = 1/((double) getSize());
+        file << "payoff coefficients          <vector>     " << payoffcoeff << "\n";
+//        cout << "attention le payoff coeff  = 1/size_, répart égale => bizarre" << "\n";
+        file << "timestep number              <int>        " << nbTimeSteps_ << "\n";
+        // Redirect cout back to screen
+        file.close();
     }
 };
 
