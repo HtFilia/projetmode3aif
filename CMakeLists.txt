@@ -69,8 +69,11 @@ target_link_libraries(test-payoff jl_parser ${LIBS})
 add_executable(test-asset tests/testAsset.cpp ${SRC})
 target_link_libraries(test-asset jl_parser ${LIBS})
 
-add_executable(test-pricer tests/testPrice0.cpp ${SRC})
-target_link_libraries(test-pricer jl_parser ${LIBS})
+add_executable(test-pricer0 tests/testPrice0.cpp ${SRC})
+target_link_libraries(test-pricer0 jl_parser ${LIBS})
+
+add_executable(test-pricert tests/testPriceT.cpp ${SRC})
+target_link_libraries(test-pricert jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
