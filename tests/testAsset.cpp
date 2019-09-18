@@ -17,19 +17,27 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
-    int N = 10;
+    int N1 = 10;
+    int N = 20;
     int d = 5;
     double r = 0.1;
     double rho = 0.2;
+    double T = 1;
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
 
-    PnlMat* path = pnl_mat_create(N+1, d);
-    double T = 1;
+    PnlMat* past = pnl_mat_create(N1+1, d);
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    bsModel->asset(path, T, N, rng);
+    bsModel->asset(past, T, N1, rng);
+    pnl_mat_print(past);
+
+    std::cout << std::endl << std::endl;
+
+    PnlMat* path = pnl_mat_create(N+1, d);
+    double t = T / N1;
+    bsModel->asset(path, t, T, N, rng, past);
     pnl_mat_print(path);
 
     return 0;

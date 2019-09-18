@@ -33,6 +33,7 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
     // Calcul de G
     PnlMat* G = pnl_mat_create(nbTimeSteps, getSize());
     pnl_mat_rng_normal(G, nbTimeSteps, getSize(), rng);
+
     // On copie les spots sur le marché
     pnl_mat_set_row(path, getSpot(), 0);
 
@@ -68,7 +69,46 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
  * @param[in] past trajectoire réalisée jusqu'a la date t
  */
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) {
-    //TODO
+
+    // Calcul de L
+    PnlMat* L = pnl_mat_create_from_scalar(getSize(), getSize(), getRho());
+    for (int d = 0; d < getSize(); d++) {
+        pnl_mat_set(L, d, d, 1);
+    }
+    pnl_mat_chol(L);
+    PnlVect* L_j = pnl_vect_create(getSize());
+
+    // Calcul de G
+    PnlMat* G = pnl_mat_create(nbTimeSteps + 2 - past->m, getSize());
+    pnl_mat_rng_normal(G, nbTimeSteps + 2 - past->m, getSize(), rng);
+    PnlVect* G_i = pnl_vect_create(getSize());
+
+    // On copie les résultats avant t sur le marché
+    pnl_mat_set_subblock(path, past, 0, 0);
+
+    // Calcul des spots en t_(i+1) en fonction de ceux en t
+    pnl_mat_get_row(G_i, G, 0);
+    double delta_t = (past->m - 1) * T / nbTimeSteps - t;
+    for (int j = 0; j < getSize(); j++) {
+        double vol = GET(getSigma(), j);
+        pnl_mat_get_row(L_j, L, j);
+        double exposant = (getR() - SQR(vol) / 2) * delta_t + vol * sqrt(delta_t) * pnl_vect_scalar_prod(L_j, G_i);
+        pnl_mat_set(path, past->m - 1, j, pnl_mat_get(path, past->m - 1, j) * exp(exposant));
+    }
+
+    // Pour chaque temps restant
+    for (int i = past->m; i <= nbTimeSteps; i++) {
+        // Calcul de G_i
+        pnl_mat_get_row(G_i, G, i + 1 - past->m);
+
+        // Pour chaque spot
+        for (int j = 0; j < getSize(); j++) {
+            double vol = GET(getSigma(), j);
+            pnl_mat_get_row(L_j, L, j);
+            double exposant = (getR() - SQR(vol) / 2) * T / nbTimeSteps + vol * sqrt(T / nbTimeSteps) * pnl_vect_scalar_prod(L_j, G_i);
+            pnl_mat_set(path, i, j, pnl_mat_get(path, i - 1, j) * exp(exposant));
+        }
+    }
 }
 
 /**
