@@ -82,6 +82,12 @@ target_link_libraries(test-pricer0 jl_parser ${LIBS})
 add_executable(test-pricert tests/testPriceT.cpp ${SRC})
 target_link_libraries(test-pricert jl_parser ${LIBS})
 
+add_executable(test-shift tests/testShiftAsset.cpp ${SRC})
+target_link_libraries(test-shift jl_parser ${LIBS})
+
+add_executable(test-deltas tests/testDeltas.cpp ${SRC})
+target_link_libraries(test-deltas jl_parser ${LIBS})
+
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
 message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")
