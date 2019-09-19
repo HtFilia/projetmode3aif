@@ -88,6 +88,14 @@ target_link_libraries(test-shift jl_parser ${LIBS})
 add_executable(test-deltas tests/testDeltas.cpp ${SRC})
 target_link_libraries(test-deltas jl_parser ${LIBS})
 
+
+# Applications finales
+add_executable(price0 tests/price0.cpp ${SRC})
+target_link_libraries(price0 jl_parser ${LIBS})
+
+add_executable(hedge tests/hedge.cpp ${SRC})
+target_link_libraries(hedge jl_parser ${LIBS})
+
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
 message(STATUS "COMPILE_DEFINITIONS = ${DirDefs}")

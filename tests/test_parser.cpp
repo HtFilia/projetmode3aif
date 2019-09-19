@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
     P->print();
     cout << endl;
-    cout << "option type " << type << endl;
+    cout << "option type " << type << std::endl;
     cout << "maturity " << T << endl;
     cout << "strike " << strike << endl;
     cout << "option size " << size << endl;
