@@ -54,8 +54,8 @@ public:
         P->extract("option size", size);
         this->size_ = size;
         P->extract("strike", this->K_);
-        P->extract("hedging dates number", this->nbTimeSteps_);
         P->extract("payoff coefficients", this->lambda_, size);
+        P->extract("timestep number", this->nbTimeSteps_);
 	}
 
 	~Basket(){}

@@ -45,7 +45,7 @@ public:
         P->extract("maturity", this->T_);
         P->extract("option size", size);
         this->size_ = size;
-        P->extract("hedging dates number", this->nbTimeSteps_);
+        P->extract("timestep number", this->nbTimeSteps_);
         P->extract("payoff coefficients", this->lambda_, size);
     }
 
