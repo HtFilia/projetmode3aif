@@ -56,9 +56,20 @@ int main(int argc, char **argv) {
     Param *P = new Parser(infile);
 
     // Parsing
+    // Option Parsing
     P->extract("option type", type);
     P->extract("maturity", T);
     P->extract("option size", size);
+    P->extract("timestep number", timestepNumber);
+    P->extract("payoff coefficients", lambda, size);
+
+    // Spot only for basket and asian
+    //TODO : améliorable comme la formule en ligne 76
+    if (type == "basket" || type == "asian") {
+        P->extract("strike", strike);
+    }
+
+    // BSModel Parsing
     P->extract("spot", spot, size);
     P->extract("volatility", sigma, size);
     P->extract("interest rate", r);
@@ -66,10 +77,8 @@ int main(int argc, char **argv) {
     {
         divid = pnl_vect_create_from_zero(size);
     }
-    P->extract("strike", strike);
-    P->extract("sample number", n_samples);
-    P->extract("timestep number", timestepNumber);
-    P->extract("payoff coefficients", lambda, size);
+
+    // MonteCarlo Parsing and variables
     P->extract("sample number", n_samples);
     fdSteps = T / n_samples;
 
