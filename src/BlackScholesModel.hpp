@@ -169,7 +169,8 @@ public:
         this->spot_ = spot;
     }
 
-    ~BlackScholesModel(){}
+    ~BlackScholesModel(){
+    }
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path

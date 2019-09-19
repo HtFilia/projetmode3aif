@@ -52,7 +52,9 @@ public:
     /**
      * Destructeur
      */
-    ~Performance(){}
+    ~Performance(){
+        pnl_vect_free(&lambda_);
+    }
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
@@ -84,12 +86,12 @@ public:
         }
     }
 
-    friend ostream &operator<<(ostream &os, const Performance &performance);
+//    friend ostream &operator<<(ostream &os, const Performance &performance);
 };
 
-ostream &operator<<(ostream &os, const Performance &performance) {
-    os << "\nPerformance option\n" << static_cast<const Option &>(performance) << "\nlambda_: " << performance.lambda_;
-    return os;
-}
+//ostream &operator<<(ostream &os, const Performance &performance) {
+//    os << "\nPerformance option\n" << static_cast<const Option &>(performance) << "\nlambda_: " << performance.lambda_;
+//    return os;
+//}
 
 #endif //PROJETMODPRO_PERFORMANCE_H

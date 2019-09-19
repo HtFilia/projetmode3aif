@@ -114,13 +114,13 @@ public:
      */
     virtual double payoff(const PnlMat *path) = 0;
 
-    friend std::ostream &operator<<(std::ostream &os, const Option &option);
+//    friend std::ostream &operator<<(std::ostream &os, const Option &option);
 };
-
-std::ostream &operator<<(std::ostream &os, const Option &option) {
-    os << "T_: " << option.T_ << "\nsize_: " << option.size_ << "\nnbTimeSteps_: " << option.nbTimeSteps_;
-    return os;
-}
+//
+//std::ostream &operator<<(std::ostream &os, const Option &option) {
+//    os << "T_: " << option.T_ << "\nsize_: " << option.size_ << "\nnbTimeSteps_: " << option.nbTimeSteps_;
+//    return os;
+//}
 
 
 #endif //PROJETMODPRO_OPTION_H

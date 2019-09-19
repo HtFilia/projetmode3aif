@@ -60,19 +60,30 @@ public:
         P->extract("strike", this->K_);
         P->extract("timestep number", this->nbTimeSteps_);
         P->extract("payoff coefficients", this->lambda_, size);
+        delete P;
 	}
 
-	~Basket(){}
+	~Basket(){
+	    pnl_vect_free(&lambda_);
+	}
 
-	/**
-	 * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
-	 *
-	 * @param[out] path le marché contenant les spots des sous-jacents
-	 * 					aux différents temps étudiés.
-	 *
-	 * @return la valeur du payoff du Call.
-	 *
-	 */
+    double getK() const {
+        return K_;
+    }
+
+    PnlVect *getLambda() const {
+        return lambda_;
+    }
+
+    /**
+     * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
+     *
+     * @param[out] path le marché contenant les spots des sous-jacents
+     * 					aux différents temps étudiés.
+     *
+     * @return la valeur du payoff du Call.
+     *
+     */
 	double payoff(const PnlMat *path) {
         if (path->m != getTimeSteps() + 1) {
             throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
@@ -101,13 +112,11 @@ public:
         file.close();
     }
 
-    friend ostream &operator<<(ostream &os, const Basket &basket);
-
 };
-
-ostream &operator<<(ostream &os, const Basket &basket) {
-    os << "\nBasket option\n" << static_cast<const Option &>(basket) << "\nK_: " << basket.K_ << "\nlambda_: " << *(basket.lambda_->array);
-    return os;
-}
+//
+//ostream &operator<<(ostream &os, const Basket &basket) {
+//    os << "\nBasket option\n" << static_cast<const Option &>(basket) << "\nK_: " << basket.getK() << "\nlambda_: " << *(basket.getLambda()->array);
+//    return os;
+//}
 
 #endif //PROJETMODPRO_BASKET_H
