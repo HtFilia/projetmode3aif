@@ -1,10 +1,10 @@
 /**
- * \file testPriceT.cpp
+ * \file testShiftAsset.cpp
  *
- * \brief Fichier test de la méthode Price en t pour différentes options.
+ * \brief Fichier test de la méthode shiftAsset.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
- * Fait le 18.09.2019
+ * Fait le 19.09.2019
  *
  */
 
@@ -46,18 +46,17 @@ int main(int argc, char *argv[]) {
 
     // Monte Carlo Init
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
-    double price = 0;
-    double ic = 0;
+    PnlVect* deltas = pnl_vect_create(d);
+    PnlVect* ic = pnl_vect_create(d);
 
     // Past Market Init (to t_i)
     PnlMat* past = pnl_mat_create(NPast + 2, d);
     bsModel->asset(past, t, NPast + 1, rng);
     pnl_rng_sseed(rng, time(NULL));
 
-    // Test Pricer en t
-    monteCarlo->price(past, t, price, ic);
-    std::cout << "Prix en t : " << price << std::endl;
-    std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
+    // Test Deltas
+    monteCarlo->delta(past, t, deltas, ic);
+    std::cout << "Deltas : " << pnl_vect_print(deltas) << std::endl;
+    std::cout << "IC : " << pnl_vect_print(ic) << std::endl;
 
     return 0;
-}
