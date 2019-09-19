@@ -130,6 +130,30 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
  * @param[in] timestep pas de constatation du sous-jacent
  */
 void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep) {
-    //TODO
-}
 
+    std::cout << "Normal Path : " << std::endl;
+    pnl_mat_print(path);
+
+    // Copy shift-path
+    pnl_mat_set_subblock(shift_path, path, 0, 0);
+
+    // Find index to start shifting
+    double exactInd = t / timestep;
+    int ind;
+    if (floor(exactInd) != exactInd) {
+        ind = (int)floor(exactInd) + 1;
+    } else {
+        ind = (int)exactInd;
+    }
+    std::cout << "indice : " << ind << std::endl;
+    std::cout << "d : " << d << std::endl;
+
+    // Shifting Start
+    for (; ind < path->m; ind++) {
+        std::cout << "current block value : " << pnl_mat_get(shift_path, ind, d) << std::endl;
+        pnl_mat_set(shift_path, ind, d, pnl_mat_get(shift_path, ind, d) * (1 + h));
+    }
+
+    std::cout << "Shifted Path : " << std::endl;
+    pnl_mat_print(shift_path);
+}
