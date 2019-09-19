@@ -11,6 +11,7 @@
 #ifndef PROJETMODPRO_ASIAN_H
 #define PROJETMODPRO_ASIAN_H
 
+#include <jlparser/parser.hpp>
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
@@ -45,7 +46,20 @@ public:
         this->lambda_ = lambda;
     }
 
-    ~Asian(){}
+    Asian(const char *InputFile) {
+        Parser *P = new Parser(InputFile);
+        int size;
+        P->extract("maturity", this->T_);
+        P->extract("option size", size);
+        this->size_ = size;
+        P->extract("strike", this->K_);
+        P->extract("timestep number", this->nbTimeSteps_);
+        P->extract("payoff coefficients", this->lambda_, size);
+    }
+
+    ~Asian(){
+        pnl_vect_free(&lambda_);
+    }
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
@@ -71,6 +85,12 @@ public:
         }
     }
 
+//    friend ostream &operator<<(ostream &os, const Asian &asian);
 };
+//
+//ostream &operator<<(ostream &os, const Asian &asian) {
+//    os << "\nAsian Option\n" << static_cast<const Option &>(asian) << "\nK_: " << asian.K_ << "\nlambda_: " << *(asian.lambda_->array);
+//    return os;
+//}
 
 #endif //PROJETMODPRO_ASIAN_H
