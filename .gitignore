@@ -129,4 +129,8 @@ fabric.properties
 # Idea directory
 .idea/
 
+# Dumped Core
+/src/3rdparty/jlparser/3rdparty/variant/include/mpark/.nfs00000000014677e2000000c5
+
+
 # End of https://www.gitignore.io/api/c++,clion

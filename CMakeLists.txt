@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 project(mc-pricer CXX)
-option(BUILD_DOC "Build documentation" ON)
 
 # Prefix
 if (NOT PREFIX)
@@ -22,11 +21,8 @@ endif ()
 
 
 # Detect PNL
-set(Pnl_DIR "/matieres/5MMPMP6/pnl/src")
 find_package(Pnl REQUIRED)
-set(PNL_LIBRARIES "/matieres/5MMPMP6/pnl/src/libpnl.so")
 set(LIBS ${LIBS} ${PNL_LIBRARIES})
-set(PNL_INCLUDE_DIRS "/matieres/5MMPMP6/pnl/include")
 include_directories(${PNL_INCLUDE_DIRS})
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     add_definitions(-DPNL_RANGE_CHECK_OFF)
@@ -53,10 +49,18 @@ file(GLOB SRC
     )
 
 # Add jlparser
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+if (WIN32)
+    include(CheckCXXCompilerFlag)
+    CHECK_CXX_COMPILER_FLAG("/std:c++latest" _cpp_latest_flag_supported)
+    if (_cpp_latest_flag_supported)
+        add_compile_options("/std:c++latest")
+    endif()
+endif()
 add_subdirectory(src/3rdparty/jlparser)
+
 
 # Test the parser
 add_executable(test-parser tests/test_parser.cpp ${SRC})
@@ -77,6 +81,12 @@ target_link_libraries(test-pricer0 jl_parser ${LIBS})
 
 add_executable(test-pricert tests/testPriceT.cpp ${SRC})
 target_link_libraries(test-pricert jl_parser ${LIBS})
+
+add_executable(test-shift tests/testShiftAsset.cpp ${SRC})
+target_link_libraries(test-shift jl_parser ${LIBS})
+
+add_executable(test-deltas tests/testDeltas.cpp ${SRC})
+target_link_libraries(test-deltas jl_parser ${LIBS})
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)

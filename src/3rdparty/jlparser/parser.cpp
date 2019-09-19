@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <iterator>
 
-using namespace std;
-
 #include "jlparser/parser.hpp"
 
 template <typename T>
@@ -22,34 +20,34 @@ std::ostream& operator<< (std::ostream& out, const std::vector<T>& v)
 
 void TypeVal::print(const std::string &key) const
 {
-  cout << key << ": ";
+  std::cout << key << ": ";
   switch (type)
     {
     case T_INT:
-      cout << mpark::get<int>(Val);
-      cout << endl;
+      std::cout << std::get<int>(Val);
+      std::cout << std::endl;
       break;
     case T_LONG:
-      cout << mpark::get<size_t>(Val);
-      cout << endl;
+      std::cout << std::get<size_t>(Val);
+      std::cout << std::endl;
       break;
     case T_DOUBLE:
-      cout << mpark::get<double>(Val);
-      cout << endl;
+      std::cout << std::get<double>(Val);
+      std::cout << std::endl;
       break;
     case T_STRING:
-      cout << mpark::get<string>(Val);
-      cout << endl;
+      std::cout << std::get<std::string>(Val);
+      std::cout << std::endl;
       break;
     case T_PTR:
-      cout << mpark::get<void *>(Val);
-      cout << endl;
+      std::cout << std::get<void *>(Val);
+      std::cout << std::endl;
       break;
     case T_VECTOR:
         {
-          vector<double> v = mpark::get< vector<double> >(Val);
-          cout << v;
-          cout << endl;
+          std::vector<double> v = std::get< std::vector<double> >(Val);
+          std::cout << v;
+          std::cout << std::endl;
         }
       break;
     default:
@@ -73,25 +71,25 @@ TypeVal& TypeVal::operator= (const TypeVal &v)
   switch(type)
     {
     case T_VECTOR:
-      Val = mpark::get<vector<double> >(v.Val);
+      Val = std::get<std::vector<double> >(v.Val);
       break;
     case T_STRING:
-      Val = mpark::get<string>(v.Val);
+      Val = std::get<std::string>(v.Val);
       break;
     case T_INT:
-      Val = mpark::get<int>(v.Val);
+      Val = std::get<int>(v.Val);
       break;
     case T_LONG:
-      Val = mpark::get<size_t>(v.Val);
+      Val = std::get<size_t>(v.Val);
       break;
     case T_DOUBLE:
-      Val = mpark::get<double>(v.Val);
+      Val = std::get<double>(v.Val);
       break;
     case T_PTR:
-      Val = mpark::get<void *>(v.Val);
+      Val = std::get<void *>(v.Val);
       break;
     default:
-      cout << "Unknown type " << type << endl;
+      std::cout << "Unknown type " << type << std::endl;
       break;
     }
   return *this;
@@ -138,7 +136,7 @@ void Parser::ReadInputFile(const char *InputFile)
 
   if ((fic = fopen(InputFile, "r")) == NULL)
     {
-      printf("Unable to open Input File \"%s\"\n", InputFile);
+      printf("Unable to open Input File %s\n", InputFile);
       exit(1);
     }
 
@@ -180,7 +178,6 @@ void Parser::ReadInputFile(const char *InputFile)
           break;
         }
     }
-    std::cerr << "test" << std::endl;
   fclose(fic);
 }
 
@@ -190,7 +187,7 @@ bool Param::check_if_key(Hash::const_iterator &it, const std::string &key) const
   it = M.find(key);
   if (it == M.end())
     {
-      // cout << key << " entry is missing" << endl;
+      // std::cout << key << " entry is missing" << std::endl;
       return false;
     }
   return true;
@@ -219,12 +216,12 @@ bool Param::extract(const std::string &key, PnlVect *&out, int size, bool go_on)
         }
       return false;
     }
-  vector<double> v;
+  std::vector<double> v;
   try
     {
-      v = mpark::get<vector<double> >(it->second.Val);
+      v = std::get<std::vector<double> >(it->second.Val);
     }
-  catch (mpark::bad_variant_access e)
+  catch (std::bad_variant_access e)
     {
       std::cout << "bad get for " << key << std::endl;
       abort();
@@ -238,7 +235,7 @@ bool Param::extract(const std::string &key, PnlVect *&out, int size, bool go_on)
     {
       if (v.size() != (unsigned long) size)
         {
-          cout << key << " size mismatch for vector " << key << endl;
+          std::cout << key << " size mismatch for vector " << key << std::endl;
           abort();
         }
       out = pnl_vect_create_from_ptr(size, &v[0]);
@@ -247,7 +244,7 @@ bool Param::extract(const std::string &key, PnlVect *&out, int size, bool go_on)
 }
 
 
-static vector<double> charPtrTovector(const char *s)
+static std::vector<double> charPtrTovector(const char *s)
 {
   const char *p = s;
   char *q;
@@ -261,7 +258,7 @@ static vector<double> charPtrTovector(const char *s)
       len ++;
       p = q;
     }
-  vector<double> v(len);
+  std::vector<double> v(len);
 
   p = s;
   for (int i = 0 ; i < len ; i++)
@@ -336,7 +333,7 @@ void Parser::add(char RedLine[])
   else if (strcmp(type_str, "string") == 0)
     {
       T.type = T_STRING;
-      T.Val = string(val_str);
+      T.Val = std::string(val_str);
     }
   else if (strcmp(type_str, "vector") == 0)
     {
