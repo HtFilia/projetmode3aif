@@ -10,6 +10,7 @@
 #ifndef PROJETMODPRO_OPTION_H
 #define PROJETMODPRO_OPTION_H
 
+#include <ostream>
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
@@ -113,7 +114,13 @@ public:
      */
     virtual double payoff(const PnlMat *path) = 0;
 
+    friend std::ostream &operator<<(std::ostream &os, const Option &option);
 };
+
+std::ostream &operator<<(std::ostream &os, const Option &option) {
+    os << "T_: " << option.T_ << "\nsize_: " << option.size_ << "\nnbTimeSteps_: " << option.nbTimeSteps_;
+    return os;
+}
 
 
 #endif //PROJETMODPRO_OPTION_H

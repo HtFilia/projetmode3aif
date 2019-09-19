@@ -83,6 +83,12 @@ public:
         }
     }
 
+    friend ostream &operator<<(ostream &os, const Asian &asian);
 };
+
+ostream &operator<<(ostream &os, const Asian &asian) {
+    os << "\nAsian Option\n" << static_cast<const Option &>(asian) << "\nK_: " << asian.K_ << "\nlambda_: " << *(asian.lambda_->array);
+    return os;
+}
 
 #endif //PROJETMODPRO_ASIAN_H

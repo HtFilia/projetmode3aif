@@ -97,11 +97,17 @@ public:
         file << "option type                  <string>     basket" << "\n";
         double payoffcoeff = 1/((double) getSize());
         file << "payoff coefficients          <vector>     " << payoffcoeff << "\n";
-//        cout << "attention le payoff coeff  = 1/size_, répart égale => bizarre" << "\n";
         file << "timestep number              <int>        " << nbTimeSteps_ << "\n";
-        // Redirect cout back to screen
         file.close();
     }
+
+    friend ostream &operator<<(ostream &os, const Basket &basket);
+
 };
+
+ostream &operator<<(ostream &os, const Basket &basket) {
+    os << "\nBasket option\n" << static_cast<const Option &>(basket) << "\nK_: " << basket.K_ << "\nlambda_: " << *(basket.lambda_->array);
+    return os;
+}
 
 #endif //PROJETMODPRO_BASKET_H

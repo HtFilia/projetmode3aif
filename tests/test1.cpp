@@ -8,6 +8,7 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "jlparser/parser.hpp"
+#include "../src/Option.hpp"
 #include "../src/Basket.hpp"
 #include "../src/Asian.hpp"
 #include "../src/Performance.hpp"
@@ -21,6 +22,7 @@ TEST(Payoff, ExampleHard)
     Basket* basketOption = new Basket(100, 10, 1, 1, lambda);
     PnlMat* path = pnl_mat_create_from_scalar(2, 1, 110);
     EXPECT_EQ(10,basketOption->payoff(path));
+    cout << *basketOption << endl;
 }
 
 TEST(Payoff, ExampleParsingOption)
@@ -30,6 +32,7 @@ TEST(Payoff, ExampleParsingOption)
     Basket* basketOption = new Basket(infile);
     PnlMat* path = pnl_mat_create_from_scalar(basketOption->getTimeSteps()+1, basketOption->getSize(), 2000);
     EXPECT_EQ(1900, basketOption->payoff(path));
+    cout << *basketOption << endl;
 }
 
 

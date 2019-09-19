@@ -83,6 +83,13 @@ public:
             return res;
         }
     }
+
+    friend ostream &operator<<(ostream &os, const Performance &performance);
 };
+
+ostream &operator<<(ostream &os, const Performance &performance) {
+    os << "\nPerformance option\n" << static_cast<const Option &>(performance) << "\nlambda_: " << performance.lambda_;
+    return os;
+}
 
 #endif //PROJETMODPRO_PERFORMANCE_H
