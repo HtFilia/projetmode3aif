@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <type_traits>
 #include <cctype>
-#include "mpark/variant.hpp"
+#include <variant>
 
 #define MAX_CHAR_LINE 1024
 // #define DEBUG
@@ -32,7 +32,7 @@ class TypeVal
 {
 public:
   T_type type;
-  mpark::variant<int, size_t, double, std::vector<double>, std::string, void *> Val;
+  std::variant<int, size_t, double, std::vector<double>, std::string, void *> Val;
   TypeVal();
   TypeVal(const TypeVal &);
   // Be sure not to delete anything because we rely on copy by address.
@@ -86,10 +86,10 @@ public:
       }
     try
       {
-        out = mpark::get<T>(it->second.Val);
+        out = std::get<T>(it->second.Val);
         return true;
       }
-    catch (mpark::bad_variant_access e)
+    catch (std::bad_variant_access e)
       {
         std::cout << "bad get for " << key << std::endl;
         abort();
@@ -104,10 +104,10 @@ public:
     if ((it = M.find(key)) == M.end()) return false;
     try
       {
-        mpark::get<T>(it->second.Val) = in;
+        std::get<T>(it->second.Val) = in;
         return true;
       }
-    catch (mpark::bad_variant_access e)
+    catch (std::bad_variant_access e)
       {
         std::cout << "bad get for " << key << std::endl;
         abort();

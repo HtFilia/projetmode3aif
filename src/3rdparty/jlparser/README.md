@@ -3,6 +3,8 @@
 ## Introduction
 
 **JLParser** is a C++ tool to read files with format
+
+This version requires your compiler to support `C++-17`.
 ```
 # Some comment
 
@@ -27,7 +29,7 @@ git submodule update --init
 In your `CMakeLists.txt`, add
 
 ```
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(3rdparty/jlparser)
