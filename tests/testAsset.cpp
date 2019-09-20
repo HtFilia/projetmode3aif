@@ -17,8 +17,8 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
-    int N1 = 10;
-    int N = 20;
+    int N1 = 8;
+    int N = 8;
     int d = 5;
     double r = 0.1;
     double rho = 0.2;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     std::cout << std::endl << std::endl;
 
     PnlMat* path = pnl_mat_create(N+1, d);
-    double t = T / N1;
+    double t = (N1) * (T / (double)N);
     bsModel->asset(path, t, T, N, rng, past);
     pnl_mat_print(path);
 

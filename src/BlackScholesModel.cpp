@@ -77,6 +77,8 @@ void BlackScholesModel::asset(PnlMat *path, double T, int nbTimeSteps, PnlRng *r
  * @param[in] past trajectoire réalisée jusqu'a la date t
  */
 void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past) {
+    int index = ceil(t * nbTimeSteps / T);
+
     // Calcul de L
     PnlMat* L = pnl_mat_create_from_scalar(size_, size_, rho_);
     for (int d = 0; d < size_; d++) {
@@ -86,8 +88,8 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
     PnlVect* L_d = pnl_vect_create(size_);
 
     // Calcul de G
-    PnlMat* G = pnl_mat_create(nbTimeSteps + 2 - past->m, size_);
-    pnl_mat_rng_normal(G, nbTimeSteps + 2 - past->m, size_, rng);
+    PnlMat* G = pnl_mat_create(nbTimeSteps - index + 1, size_);
+    pnl_mat_rng_normal(G, nbTimeSteps - index + 1, size_, rng);
     PnlVect* G_i = pnl_vect_create(size_);
 
     // On copie les résultats de past (lignes [0 ; i]) plus les résultats en t
@@ -95,18 +97,19 @@ void BlackScholesModel::asset(PnlMat *path, double t, double T, int nbTimeSteps,
 
     // Remplacement des cours en t par ceux en t_(i+1) (ligne i+1)
     pnl_mat_get_row(G_i, G, 0);
-    double timestep = ((past->m - 1) * T / nbTimeSteps) - t;
+
+    double timestep = (index * T / (double)nbTimeSteps) - t;
     for (int d = 0; d < size_; d++) {
         pnl_mat_get_row(L_d, L, d);
         double exposant = (r_ - SQR(GET(getSigma(), d)) / 2) * timestep + GET(getSigma(), d) * sqrt(timestep) * pnl_vect_scalar_prod(L_d, G_i);
-        pnl_mat_set(path, past->m - 1, d, pnl_mat_get(path, past->m - 1, d) * exp(exposant));
+        pnl_mat_set(path, index, d, pnl_mat_get(path, index, d) * exp(exposant));
     }
 
     timestep = T / (double)nbTimeSteps;
     // Pour chaque temps restant (lignes [i+2 ; N])
-    for (int i = past->m; i <= nbTimeSteps; i++) {
+    for (int i = index + 1; i <= nbTimeSteps; i++) {
         // Calcul de G_i
-        pnl_mat_get_row(G_i, G, i + 1 - past->m);
+        pnl_mat_get_row(G_i, G, i - index);
 
         // Pour chaque spot
         for (int d = 0; d < size_; d++) {
@@ -141,17 +144,8 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
     // Copy shift-path
     pnl_mat_set_subblock(shift_path, path, 0, 0);
 
-    // Find index to start shifting
-    double exactInd = t / timestep;
-    int ind;
-    if (floor(exactInd) != exactInd) {
-        ind = (int)floor(exactInd) + 1;
-    } else {
-        ind = (int)exactInd;
-    }
-
     // Shifting Start
-    for (; ind < path->m; ind++) {
-        pnl_mat_set(shift_path, ind, d, pnl_mat_get(shift_path, ind, d) * (1 + h));
+    for (int i = ceil(t / timestep); i < path->m; i++) {
+        pnl_mat_set(shift_path, i, d, pnl_mat_get(shift_path, i, d) * (1 + h));
     }
 }

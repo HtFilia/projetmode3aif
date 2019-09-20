@@ -20,16 +20,17 @@
 int main(int argc, char *argv[]) {
 
     // Hardcoded parameters
-    double K = 100;
-    int fdSteps = 2;
+    double K = 2;
+    double fdSteps = 0.001;
     int M = 1000;
     int N = 5;
-    int NPast = 2;
+    int NPast = 1;
     int d = 2;
     double r = 0.05;
     double rho = 0;
     double T = 1;
-    double t = T * (NPast + 0.5) / N;
+    double t = (NPast - 0.1) * T / (double)N;
+    std::cout << "t = " << t << std::endl;
     PnlVect *lambda = pnl_vect_create_from_scalar(d, 0.2);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
@@ -50,8 +51,10 @@ int main(int argc, char *argv[]) {
     PnlVect *ic = pnl_vect_create(d);
 
     // Past Market Init (to t_i)
-    PnlMat *past = pnl_mat_create(NPast + 2, d);
-    bsModel->asset(past, t, NPast + 1, rng);
+    PnlMat *past = pnl_mat_create(NPast + 1, d);
+    bsModel->asset(past, t, NPast, rng);
+    std::cout << "path : " << std::endl;
+    pnl_mat_print(past);
     pnl_rng_sseed(rng, time(NULL));
 
     // Test Deltas
