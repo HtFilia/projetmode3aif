@@ -22,14 +22,14 @@ int main(int argc, char *argv[]) {
 
     // Hardcoded parameters
     double K = 100;
-    int fdSteps = 2;
-    int M = 100000;
-    int N = 100;
+    double T = 0.5;
     int d = 5;
+    int fdSteps = 2;
+    int M = 10000;
+    int N = 100;
     double r = 0.05;
     double rho = 0;
-    double T = 0.5;
-    PnlVect* lambda = pnl_vect_create_from_scalar(d, 0.2);
+    PnlVect* lambda = pnl_vect_create_from_scalar(d, 1 / (double) d);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
 
@@ -38,9 +38,6 @@ int main(int argc, char *argv[]) {
 
     // BSModel Init
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
-  
-    // Market Path Init
-    PnlMat* path = pnl_mat_create(N+1, d);
 
     // RNG Init
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
@@ -59,10 +56,9 @@ int main(int argc, char *argv[]) {
     //free
     pnl_vect_free(&sigma);
     pnl_vect_free(&spot);
-    delete bsModel;
-    pnl_mat_free(&path);
-    pnl_rng_free(&rng);
     pnl_vect_free(&lambda);
+    pnl_rng_free(&rng);
+    delete bsModel;
     delete basketAverageOption;
     delete monteCarlo;
 

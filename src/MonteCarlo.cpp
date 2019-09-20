@@ -21,24 +21,20 @@
 * @param[out] ic largeur de l'intervalle de confiance
 */
 void MonteCarlo::price(double &prix, double &ic) {
-    double interestRate = mod_->getR();
-    double maturity = opt_->getMaturity();
     PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
     prix = 0;
     double var = 0;
 
     for (int i = 0; i < nbSamples_; i++) {
-        mod_->asset(path, maturity, opt_->getTimeSteps(), rng_);
+        mod_->asset(path, opt_->getMaturity(), opt_->getTimeSteps(), rng_);
         double tmp = opt_->payoff(path);
         prix += tmp;
         var += tmp * tmp;
     }
 
-    prix /= nbSamples_;
-    var = var / nbSamples_ - prix * prix;
-    var *= exp(-2 * maturity * interestRate);
+    prix = exp(- mod_->getR() * opt_->getMaturity()) * prix / nbSamples_;
+    var = exp(-2 * mod_->getR() * opt_->getMaturity()) * var / nbSamples_ - prix * prix;
     ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
-    prix *= exp(-maturity * interestRate);
 
     //free
     pnl_mat_free(&path);
@@ -55,24 +51,23 @@ void MonteCarlo::price(double &prix, double &ic) {
  * de confiance sur le calcul du prix
  */
 void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
-    double interestRate = mod_->getR();
-    double maturity = opt_->getMaturity();
     PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
     prix = 0;
     double var = 0;
 
     for (int i = 0; i < nbSamples_; i++) {
-        mod_->asset(path, t, maturity, opt_->getTimeSteps(), rng_, past);
+        mod_->asset(path, t, opt_->getMaturity(), opt_->getTimeSteps(), rng_, past);
         double tmp = opt_->payoff(path);
         prix += tmp;
         var += tmp * tmp;
     }
 
-    prix /= nbSamples_;
-    var = var / nbSamples_ - prix * prix;
-    var *= exp(-2 * (maturity - t) * interestRate);
+    prix = exp(- mod_->getR() * (opt_->getMaturity() - t)) * prix / nbSamples_;
+    var = exp(-2 *  mod_->getR() * (opt_->getMaturity() - t)) * var / nbSamples_ - prix * prix;
     ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
-    prix *= exp(-(maturity - t) * interestRate);
+
+    //free
+    pnl_mat_free(&path);
 }
 
 /**
@@ -86,8 +81,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
  * de confiance sur le calcul du delta
  */
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic) {
-    double interestRate = mod_->getR();
-    double maturity = opt_->getMaturity();
+    double timestep = opt_->getMaturity() / opt_->getTimeSteps();
     PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
     PnlMat* shift_path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
 
@@ -95,22 +89,23 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
         double delta_d = 0;
         double var = 0;
         for (int i = 0; i < nbSamples_; i++) {
-            mod_->asset(path, t, maturity, opt_->getTimeSteps(), rng_, past);
-            mod_->shiftAsset(shift_path, path, d, fdStep_, t, opt_->getMaturity() / opt_->getTimeSteps());
+            mod_->asset(path, t, opt_->getMaturity(), opt_->getTimeSteps(), rng_, past);
+            mod_->shiftAsset(shift_path, path, d, fdStep_, t, timestep);
             double tmp = opt_->payoff(shift_path);
-            mod_->shiftAsset(shift_path, path, d, -fdStep_, t, opt_->getMaturity() / opt_->getTimeSteps());
+            mod_->shiftAsset(shift_path, path, d, -fdStep_, t, timestep);
             tmp -= opt_->payoff(shift_path);
-            tmp /= 2 * fdStep_ * pnl_mat_get(past, past->m - 1, d);
             delta_d += tmp;
             var += tmp * tmp;
         }
-        delta_d /= nbSamples_;
-        var = var / nbSamples_ - delta_d * delta_d;
-        var *= exp(-2 * (maturity - t) * interestRate);
+        delta_d  = exp(- mod_->getR() * (opt_->getMaturity() - t)) * (delta_d / 2 * fdStep_ * pnl_mat_get(past, past->m - 1, d)) / nbSamples_;
+        var = exp(-2 * mod_->getR() * (opt_->getMaturity() - t)) * (var / SQR(2 * fdStep_ * pnl_mat_get(past, past->m - 1, d))) / nbSamples_ - delta_d * delta_d;
         double ic_d = 2 * 1.96 * sqrt(var / (double)nbSamples_);
-        delta_d *= exp(-(maturity - t) * interestRate);
 
         pnl_vect_set(delta, d, delta_d);
         pnl_vect_set(ic, d, ic_d);
     }
+
+    //free
+    pnl_mat_free(&path);
+    pnl_mat_free(&shift_path);
 }
