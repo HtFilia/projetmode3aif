@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
     double K = 100;
     double fdSteps = 0.1;
     int M = 1000;
-    int N = 4;
-    int H = 12;
+    int N = 40;
+    int H = 120;
     int d = 5;
-    double r = 0.01;
+    double r = 0.02;
     double rho = 0;
     double T = 0.5;
     PnlVect *lambda = pnl_vect_create_from_scalar(d, 1 / (double)d);
@@ -48,19 +48,25 @@ int main(int argc, char *argv[]) {
     PnlVect *delta0 = pnl_vect_create(H + 1);
     double error;
 
+    // Test Pricer en 0
+    double price = 0;
+    double ic = 0;
+    monteCarlo->price(price, ic);
+
     // Market Init
     PnlMat *path = pnl_mat_create(H + 1, d);
     bsModel->asset(path, T, H, rng);
-    std::cout << "path : " << std::endl;
-    pnl_mat_print(path);
+    //std::cout << "path : " << std::endl;
+    //pnl_mat_print(path);
     pnl_rng_sseed(rng, time(NULL));
 
     // Test Couverture
     monteCarlo->profitAndLoss(path, deltas, delta0, error);
-    std::cout << "Deltas : " <<  std::endl;
-    pnl_mat_print(deltas);
-    std::cout << "Delta0 : " << std::endl;
-    pnl_vect_print(delta0);
+    //std::cout << "Deltas : " <<  std::endl;
+    //pnl_mat_print(deltas);
+    //std::cout << "Delta0 : " << std::endl;
+    //pnl_vect_print(delta0);
+    std::cout << std::endl << "Prix en 0 : " << price << std::endl;
     std::cout << std::endl << "Error : " << error << std::endl;
 
     return 0;
