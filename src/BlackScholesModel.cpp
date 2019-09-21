@@ -145,7 +145,7 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
     pnl_mat_set_subblock(shift_path, path, 0, 0);
 
     // Shifting Start
-    for (int i = ceil(t / timestep); i < path->m; i++) {
+    for (int i = floor(t / timestep) + 1; i < path->m; i++) {
         pnl_mat_set(shift_path, i, d, pnl_mat_get(shift_path, i, d) * (1 + h));
     }
 }

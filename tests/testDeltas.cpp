@@ -20,18 +20,18 @@
 int main(int argc, char *argv[]) {
 
     // Hardcoded parameters
-    double K = 2;
-    double fdSteps = 0.001;
+    double K = 100;
+    double fdSteps = 0.1;
     int M = 1000;
     int N = 5;
-    int NPast = 1;
-    int d = 2;
-    double r = 0.05;
+    int NPast = 2;
+    int d = 5;
+    double r = 0.01;
     double rho = 0;
-    double T = 1;
-    double t = (NPast - 0.1) * T / (double)N;
+    double T = 0.5;
+    double t = (NPast) * T / (double)N;
     std::cout << "t = " << t << std::endl;
-    PnlVect *lambda = pnl_vect_create_from_scalar(d, 0.2);
+    PnlVect *lambda = pnl_vect_create_from_scalar(d, 1 / (double)d);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
 

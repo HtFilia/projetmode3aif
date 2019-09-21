@@ -1,10 +1,10 @@
 /**
- * \file testPriceT.cpp
+ * \file testProfitAndLoss.cpp
  *
- * \brief Fichier test de la méthode Price en t pour différentes options.
+ * \brief Fichier test de la méthode P&L pour différentes options.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
- * Fait le 18.09.2019
+ * Fait le 21.09.2019
  *
  */
 
@@ -18,24 +18,22 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
-
     // Hardcoded parameters
     double K = 100;
-    int fdSteps = 2;
-    int M = 10000;
-    int N = 100;
-    int NPast = 0;
+    double fdSteps = 0.1;
+    int M = 1000;
+    int N = 4;
+    int H = 12;
     int d = 5;
-    double r = 0.05;
+    double r = 0.01;
     double rho = 0;
     double T = 0.5;
-    double t = T * (NPast) / N;
-    PnlVect* lambda = pnl_vect_create_from_scalar(d, 0.2);
+    PnlVect *lambda = pnl_vect_create_from_scalar(d, 1 / (double)d);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
 
     // Option Init
-    Basket* basketAverageOption = new Basket(K, T, d, N, lambda);
+    Basket *basketAverageOption = new Basket(K, T, d, N, lambda);
 
     // BSModel Init
     BlackScholesModel *bsModel = new BlackScholesModel(d, r, rho, sigma, spot);
@@ -46,18 +44,24 @@ int main(int argc, char *argv[]) {
 
     // Monte Carlo Init
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
-    double price = 0;
-    double ic = 0;
+    PnlMat *deltas = pnl_mat_create(H + 1, d);
+    PnlVect *delta0 = pnl_vect_create(H + 1);
+    double error;
 
-    // Past Market Init (to t_i)
-    PnlMat* past = pnl_mat_create(NPast + 2, d);
-    bsModel->asset(past, t, NPast + 1, rng);
+    // Market Init
+    PnlMat *path = pnl_mat_create(H + 1, d);
+    bsModel->asset(path, T, H, rng);
+    std::cout << "path : " << std::endl;
+    pnl_mat_print(path);
     pnl_rng_sseed(rng, time(NULL));
 
-    // Test Pricer en t
-    monteCarlo->price(past, t, price, ic);
-    std::cout << "Prix en t : " << price << std::endl;
-    std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
+    // Test Couverture
+    monteCarlo->profitAndLoss(path, deltas, delta0, error);
+    std::cout << "Deltas : " <<  std::endl;
+    pnl_mat_print(deltas);
+    std::cout << "Delta0 : " << std::endl;
+    pnl_vect_print(delta0);
+    std::cout << std::endl << "Error : " << error << std::endl;
 
     return 0;
 }
