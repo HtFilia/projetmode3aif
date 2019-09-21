@@ -20,8 +20,8 @@
 int main(int argc, char *argv[]) {
     // Hardcoded parameters
     double K = 100;
-    double fdSteps = 0.1;
-    int M = 1000;
+    double fdSteps = 0.01;
+    int M = 500;
     int N = 40;
     int H = 120;
     int d = 5;
@@ -66,8 +66,8 @@ int main(int argc, char *argv[]) {
     //pnl_mat_print(deltas);
     //std::cout << "Delta0 : " << std::endl;
     //pnl_vect_print(delta0);
-    std::cout << std::endl << "Prix en 0 : " << price << std::endl;
-    std::cout << std::endl << "Error : " << error << std::endl;
+    std::cout << "Prix en 0 : " << price << std::endl;
+    std::cout << "Error : " << error << std::endl;
 
     return 0;
 }

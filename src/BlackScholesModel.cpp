@@ -149,3 +149,54 @@ void BlackScholesModel::shiftAsset(PnlMat *shift_path, const PnlMat *path, int d
         pnl_mat_set(shift_path, i, d, pnl_mat_get(shift_path, i, d) * (1 + h));
     }
 }
+
+/**
+     * Simulation du marché
+     *
+     * @param[out]  path contient en input la simulation du marché
+     * @param[in] T date jusqu'à laquelle on simule la trajectoire
+     * @param[in] H nombre de dates pour la simulation
+     * @param[in] rng générateur de nombres aléatoires
+     */
+void BlackScholesModel::simul_market(PnlMat *path, double T, int H, PnlRng *rng) {
+    // Calcul du timestep
+    double timestep = T / (double)H;
+
+    // Calcul de L
+    PnlMat* L = pnl_mat_create_from_scalar(size_, size_, rho_);
+    for (int d = 0; d < size_; d++) {
+        pnl_mat_set(L, d, d, 1);
+    }
+    pnl_mat_chol(L);
+    PnlVect* L_d = pnl_vect_create(size_);
+
+    // Calcul de G
+    PnlMat* G = pnl_mat_create(H, size_);
+    pnl_mat_rng_normal(G, H, size_, rng);
+    PnlVect* G_i = pnl_vect_create(size_);
+
+    // On copie les spots sur le marché
+    pnl_mat_set_row(path, spot_, 0);
+
+    // Pour chaque temps t_i
+    for (int i = 1; i <= H; i++) {
+        // Récupération de G_i
+        pnl_mat_get_row(G_i, G, i - 1);
+
+        // Pour chaque spot d
+        for (int d = 0; d < size_; d++) {
+            // Récupération de L_d
+            pnl_mat_get_row(L_d, L, d);
+
+            // Calcul de l'élément (t_i, d) de la matrice en fonction de l'élément (t_(i-1), d)
+            double exposant = (GET(trend_, d) - SQR(GET(sigma_, d)) / 2) * timestep + GET(sigma_, d) * sqrt(timestep) * pnl_vect_scalar_prod(L_d, G_i);
+            pnl_mat_set(path, i, d, pnl_mat_get(path, i - 1, d) * exp(exposant));
+        }
+    }
+
+    //free
+    pnl_vect_free(&G_i);
+    pnl_vect_free(&L_d);
+    pnl_mat_free(&L);
+    pnl_mat_free(&G);
+}

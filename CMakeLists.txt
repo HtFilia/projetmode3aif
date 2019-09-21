@@ -91,6 +91,9 @@ target_link_libraries(test-deltas jl_parser ${LIBS})
 add_executable(test-couverture tests/testProfitAndLoss.cpp ${SRC})
 target_link_libraries(test-couverture jl_parser ${LIBS})
 
+add_executable(test-simulmarket tests/testSimulMarket.cpp ${SRC})
+target_link_libraries(test-simulmarket jl_parser ${LIBS})
+
 
 # Applications finales
 add_executable(price0 tests/price0.cpp ${SRC})
@@ -142,5 +145,5 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(Google_Tests_run tests/test1.cpp src/Basket.hpp src/BlackScholesModel.cpp tests/testProfitAndLoss.cpp)
+add_executable(Google_Tests_run tests/test1.cpp src/Basket.hpp src/BlackScholesModel.cpp tests/testProfitAndLoss.cpp tests/testSimulMarket.cpp)
 target_link_libraries(Google_Tests_run gtest gtest_main jl_parser ${LIBS})
