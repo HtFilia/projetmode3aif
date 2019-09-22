@@ -69,8 +69,6 @@ int main(int argc, char *argv[]) {
     delete basketAverageOption;
     pnl_rng_free(&rng);
     delete monteCarlo;
-    pnl_mat_free(&deltas);
-    pnl_vect_free(&delta0);
     pnl_mat_free(&path);
 
     return 0;
