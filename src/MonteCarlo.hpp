@@ -212,11 +212,12 @@ public:
      * Calcule le P&L le long d'une trajectoire de marché
      *
      * @param[in] path contient la trajectoire de marché
-     * @param[out] deltas contient la matrice des deltas
-     * @param[out] delta0 contient le vecteur des parts investies au tsr
+     * @param[out] prix contient le prix
+     * @param[out] ic contient la largeur de l'intervalle
+     * de confiance sur le calcul du prix
      * @param[out] error contient l'erreur de couverture
      */
-    void profitAndLoss(const PnlMat *path, PnlMat *deltas, PnlVect *delta0, double &error);
+    void profitAndLoss(const PnlMat *path, double &prix, double &ic, double &error);
 };
 
 
