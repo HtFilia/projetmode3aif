@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
     double fdSteps = 0.1;
     int M = 1000;
     int N = 5;
-    int NPast = 2;
-    int d = 5;
+    int NPast = 0;
+    int d = 10;
     double r = 0.01;
     double rho = 0;
     double T = 0.5;

@@ -28,10 +28,6 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-    // Resultat variables
-    double prix, prix_std_dev;
-    PnlVect* delta, *delta_std_dev;
-
     // Option variables
     double T, strike, payoffCoeff;
     PnlVect *divid, *lambda;
@@ -41,15 +37,14 @@ int main(int argc, char **argv) {
     Option *option;
 
     // BSModel variables
-    int dim;
     double r, rho;
     PnlVect *spot, *sigma;
 
     // MonteCarlo variables
     size_t n_samples;
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, 1);
-    double fdSteps;
+    pnl_rng_sseed(rng, time(NULL));
+    double fdSteps = 0.000001;
 
     // Parser and file to parse
     char *infile = argv[1];
@@ -73,6 +68,7 @@ int main(int argc, char **argv) {
     P->extract("spot", spot, size);
     P->extract("volatility", sigma, size);
     P->extract("interest rate", r);
+    P->extract("correlation", rho);
     if (P->extract("dividend rate", divid, size, true) == false)
     {
         divid = pnl_vect_create_from_zero(size);
@@ -80,7 +76,6 @@ int main(int argc, char **argv) {
 
     // MonteCarlo Parsing and variables
     P->extract("sample number", n_samples);
-    fdSteps = T / n_samples;
 
     // Create Option according to parameters
     if (type == "basket") {
@@ -92,19 +87,24 @@ int main(int argc, char **argv) {
     }
 
     // Create BSModel according to parameters
-    BlackScholesModel *bsModel = new BlackScholesModel(dim, r, rho, sigma, spot);
-
-    // Create Market according to parameters
-    PnlMat *path = pnl_mat_create(timestepNumber + 1, dim);
-    bsModel->asset(path, T, timestepNumber, rng);
-    pnl_rng_sseed(rng, time(NULL));
+    BlackScholesModel *bsModel = new BlackScholesModel(size, r, rho, sigma, spot);
 
     // Create MonteCarlo according to parameters
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, option, rng, fdSteps, n_samples);
 
+    // Create initial Market according to parameters
+    PnlMat *past0 = pnl_mat_create(1, size);
+    pnl_mat_set_row(past0, spot, 0);
+
+    // Resultat variables
+    double prix = 0;
+    double prix_std_dev = 0;
+    PnlVect *delta = pnl_vect_create(size);
+    PnlVect *delta_std_dev = pnl_vect_create(size);
+
     // Get price, deltas and st.deviation
-    monteCarlo->price(prix, prix_std_dev);
-    monteCarlo->delta(path, 0, delta, delta_std_dev);
+    monteCarlo->price(past0, 0, prix, prix_std_dev);
+    monteCarlo->delta(past0, 0, delta, delta_std_dev);
 
     // Print Results
     PricingResults res(prix, prix_std_dev, delta, delta_std_dev);

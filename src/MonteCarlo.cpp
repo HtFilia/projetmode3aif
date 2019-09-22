@@ -34,7 +34,7 @@ void MonteCarlo::price(double &prix, double &ic) {
 
     prix = exp(- mod_->getR() * opt_->getMaturity()) * prix / nbSamples_;
     var = exp(-2 * mod_->getR() * opt_->getMaturity()) * var / nbSamples_ - SQR(prix);
-    ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
+    ic = sqrt(var / (double)nbSamples_);
 
     //free
     pnl_mat_free(&path);
@@ -64,7 +64,7 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
 
     prix = exp(- mod_->getR() * (opt_->getMaturity() - t)) * prix / nbSamples_;
     var = exp(-2 *  mod_->getR() * (opt_->getMaturity() - t)) * var / nbSamples_ - SQR(prix);
-    ic = 2 * 1.96 * sqrt(var / (double)nbSamples_);
+    ic = sqrt(var / (double)nbSamples_);
 
     //free
     pnl_mat_free(&path);
@@ -81,32 +81,30 @@ void MonteCarlo::price(const PnlMat *past, double t, double &prix, double &ic) {
  * de confiance sur le calcul du delta
  */
 void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic) {
+    PnlVect *var = pnl_vect_create_from_scalar(mod_->getSize(), 0);
+
     double timestep = opt_->getMaturity() / (double) opt_->getTimeSteps();
+
     PnlMat *path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
     PnlMat *shift_path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
 
-    for (int d = 0; d < mod_->getSize(); d++) {
-        double delta_d = 0;
-        double var = 0;
-        for (int i = 0; i < nbSamples_; i++) {
-            mod_->asset(path, t, opt_->getMaturity(), opt_->getTimeSteps(), rng_, past);
+    for (int i = 0; i < nbSamples_; i++) {
+        mod_->asset(path, t, opt_->getMaturity(), opt_->getTimeSteps(), rng_, past);
+        for (int d = 0; d < mod_->getSize(); d++) {
             mod_->shiftAsset(shift_path, path, d, fdStep_, t, timestep);
             double tmp = opt_->payoff(shift_path);
             mod_->shiftAsset(shift_path, path, d, -fdStep_, t, timestep);
             tmp -= opt_->payoff(shift_path);
-            delta_d += tmp;
-            var += SQR(tmp);
+            pnl_vect_set(delta, d, pnl_vect_get(delta, d) + tmp);
+            pnl_vect_set(var, d, pnl_vect_get(var, d) + SQR(tmp));
         }
-        delta_d = exp(-mod_->getR() * (opt_->getMaturity() - t)) *
-                  (delta_d / (2 * fdStep_ * pnl_mat_get(past, past->m - 1, d))) / nbSamples_;
-        var = exp(-2 * mod_->getR() * (opt_->getMaturity() - t)) *
-              (var / SQR(2 * fdStep_ * pnl_mat_get(past, past->m - 1, d))) / nbSamples_ - SQR(delta_d);
-        double ic_d = 2 * 1.96 * sqrt(var / (double) nbSamples_);
-
-        pnl_vect_set(delta, d, delta_d);
-        pnl_vect_set(ic, d, ic_d);
     }
-
+    double factor = 2 * fdStep_ * exp(mod_->getR() * (opt_->getMaturity() - t));
+    for (int d = 0; d < mod_->getSize(); d++) {
+        pnl_vect_set(delta, d, pnl_vect_get(delta, d) / (factor * nbSamples_ * pnl_mat_get(past, past->m - 1, d)));
+        pnl_vect_set(var, d, pnl_vect_get(var, d) / (SQR(factor) * nbSamples_ * SQR(pnl_mat_get(past, past->m - 1, d))) - SQR(pnl_vect_get(delta, d)));
+        pnl_vect_set(ic, d, sqrt(pnl_vect_get(var, d) / (double)nbSamples_));
+    }
     //free
     pnl_mat_free(&path);
     pnl_mat_free(&shift_path);
