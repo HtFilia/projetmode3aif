@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     size_t n_samples;
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    double fdSteps = 0.000001;
+    double fdSteps = 0.00001;
 
     // Parser and file to parse
     char *infile = argv[1];
