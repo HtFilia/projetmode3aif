@@ -208,8 +208,7 @@ public:
         this->trend_ = trend;
     }
 
-    ~BlackScholesModel(){
-    }
+    ~BlackScholesModel(){}
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path

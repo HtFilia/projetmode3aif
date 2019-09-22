@@ -57,9 +57,8 @@ public:
         P->extract("payoff coefficients", this->lambda_, size);
     }
 
-    ~Asian(){
-        pnl_vect_free(&lambda_);
-    }
+    //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
+    ~Asian(){}
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.

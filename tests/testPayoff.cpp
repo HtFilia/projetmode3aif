@@ -52,10 +52,14 @@ int main(int argc, char *argv[]) {
     std::cout << "Payoff du performance : " << performanceOption->payoff(path) << std::endl;
 
     //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
     pnl_vect_free(&lambda);
+    pnl_rng_free(&rng);
     delete basketOption;
     delete asianOption;
     delete performanceOption;
+    delete bsModel;
     pnl_mat_free(&path);
 
     return 0;

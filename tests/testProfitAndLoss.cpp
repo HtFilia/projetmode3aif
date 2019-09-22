@@ -69,5 +69,17 @@ int main(int argc, char *argv[]) {
     std::cout << "Prix en 0 : " << price << std::endl;
     std::cout << "Error : " << error << std::endl;
 
+    //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    pnl_vect_free(&lambda);
+    delete bsModel;
+    delete basketAverageOption;
+    pnl_rng_free(&rng);
+    delete monteCarlo;
+    pnl_mat_free(&deltas);
+    pnl_vect_free(&delta0);
+    pnl_mat_free(&path);
+
     return 0;
 }
