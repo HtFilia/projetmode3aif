@@ -62,9 +62,9 @@ public:
         P->extract("payoff coefficients", this->lambda_, size);
         delete P;
 	}
-
+    //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
 	~Basket(){
-	    pnl_vect_free(&lambda_);
+	    //pnl_vect_free(&lambda_);
 	}
 
     double getK() const {

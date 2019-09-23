@@ -52,8 +52,9 @@ public:
     /**
      * Destructeur
      */
+    //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
     ~Performance(){
-        pnl_vect_free(&lambda_);
+        //pnl_vect_free(&lambda_);
     }
 
     /**

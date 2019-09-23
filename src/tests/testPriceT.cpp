@@ -59,5 +59,15 @@ int main(int argc, char *argv[]) {
     std::cout << "Prix en t : " << price << std::endl;
     std::cout << "Largeur intervalle Confiance : " << ic << std::endl;
 
+    //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    pnl_vect_free(&lambda);
+    pnl_rng_free(&rng);
+    pnl_mat_free(&past);
+    delete bsModel;
+    delete basketAverageOption;
+    delete monteCarlo;
+
     return 0;
 }

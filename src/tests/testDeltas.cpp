@@ -64,5 +64,17 @@ int main(int argc, char *argv[]) {
     std::cout << "IC : " << std::endl;
     pnl_vect_print(ic);
 
+    //free
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    pnl_vect_free(&lambda);
+    delete bsModel;
+    delete basketAverageOption;
+    pnl_rng_free(&rng);
+    delete monteCarlo;
+    pnl_vect_free(&deltas);
+    pnl_vect_free(&ic);
+    pnl_mat_free(&past);
+
     return 0;
 }
