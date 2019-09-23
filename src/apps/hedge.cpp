@@ -108,7 +108,9 @@ int main(int argc, char **argv) {
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
     pnl_vect_free(&divid);
+    pnl_vect_free(&lambda);
     pnl_rng_free(&rng);
+    pnl_mat_free(&path);
     delete P;
     delete option;
     delete bsModel;
