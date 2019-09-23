@@ -11,10 +11,18 @@
 #ifndef PROJETMODPRO_PERFORMANCE_H
 #define PROJETMODPRO_PERFORMANCE_H
 
-#include "iostream"
+#include <iostream>
+
 #include "Option.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_mathtools.h"
+
+/**
+ * \class Performance
+ *
+ * \brief Classe Perfomance représentant une Option de type Performance.
+ *
+ */
 
 class Performance: public Option {
 
@@ -32,30 +40,20 @@ public:
      * \brief Constructeur du Performance Option.
      *
      */
-    Performance(double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
-        this->T_ = maturity;
-        this->size_ = size;
-        this->nbTimeSteps_ = nbTimeSteps;
-        this->lambda_ = lambda;
-    }
+    Performance(double maturity, int size, int nbTimeSteps, PnlVect* lambda);
 
-    Performance(const char *InputFile) {
-        Parser *P = new Parser(InputFile);
-        int size;
-        P->extract("maturity", this->T_);
-        P->extract("option size", size);
-        this->size_ = size;
-        P->extract("timestep number", this->nbTimeSteps_);
-        P->extract("payoff coefficients", this->lambda_, size);
-    }
+    /**
+    * \brief Constructeur du Performance Option à partir d'un Fichier,
+    *        lecture à l'aide d'un Parser.
+    *
+    */
+    Performance(const char *InputFile);
 
     /**
      * Destructeur
      */
     //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
-    ~Performance(){
-        //pnl_vect_free(&lambda_);
-    }
+    ~Performance();
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
@@ -66,33 +64,7 @@ public:
      * @return la valeur du payoff du Call.
      *
      */
-    double payoff(const PnlMat *path) {
-        if (path->m != getTimeSteps() + 1) {
-            throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
-        } else if (path->n != getSize()) {
-            throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
-        } else {
-            double res = 1;
-            PnlVect *oldSpots = pnl_vect_new();
-            pnl_mat_get_row(oldSpots, path, 0);
-            PnlVect *currentSpots = pnl_vect_new();
-            for (int i = 1; i <= getTimeSteps(); i++) {
-                pnl_mat_get_row(currentSpots, path, i);
-                res += MAX(pnl_vect_scalar_prod(lambda_, currentSpots) / pnl_vect_scalar_prod(lambda_, oldSpots) - 1, 0);
-                pnl_vect_clone(oldSpots, currentSpots);
-            }
-            pnl_vect_free(&oldSpots);
-            pnl_vect_free(&currentSpots);
-            return res;
-        }
-    }
-
-//    friend ostream &operator<<(ostream &os, const Performance &performance);
+    double payoff(const PnlMat *path);
 };
-
-//ostream &operator<<(ostream &os, const Performance &performance) {
-//    os << "\nPerformance option\n" << static_cast<const Option &>(performance) << "\nlambda_: " << performance.lambda_;
-//    return os;
-//}
 
 #endif //PROJETMODPRO_PERFORMANCE_H

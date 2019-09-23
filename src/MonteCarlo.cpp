@@ -132,7 +132,7 @@ void MonteCarlo::profitAndLoss(const PnlMat *path, double &prix, double &icPrix,
 
     pnl_mat_get_row(spots, path, 0);
     pnl_mat_set_row(past, spots, 0);
-    price(past, 0, prix, icPrix);
+    MonteCarlo::price(past, 0, prix, icPrix);
     MonteCarlo::delta(past, 0, delta, icDelta);
     double delta0 = prix - pnl_vect_scalar_prod(delta, spots);
 
