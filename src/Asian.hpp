@@ -62,6 +62,8 @@ public:
     */
     ~Asian();
 
+    void setLambda(PnlVect *lambda);
+
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
      *

@@ -65,6 +65,8 @@ int main(int argc, char *argv[]) {
     pnl_vect_free(&lambda);
     pnl_rng_free(&rng);
     pnl_mat_free(&past);
+    lambda = nullptr;
+    basketAverageOption->setLambda(NULL);
     delete bsModel;
     delete basketAverageOption;
     delete monteCarlo;

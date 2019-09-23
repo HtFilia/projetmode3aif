@@ -49,7 +49,13 @@ Performance::Performance(const char *InputFile) {
 */
 //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
 Performance::~Performance(){
-    //pnl_vect_free(&lambda_);
+    if (lambda_) {
+        pnl_vect_free(&lambda_);
+    }
+}
+
+void Performance::setLambda(PnlVect *lambda) {
+    lambda_ = lambda;
 }
 
 /**

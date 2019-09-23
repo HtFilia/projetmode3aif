@@ -108,6 +108,7 @@ void MonteCarlo::delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic
         pnl_vect_set(ic, d, sqrt(pnl_vect_get(var, d) / (double)nbSamples_));
     }
     //free
+    pnl_vect_free(&var);
     pnl_mat_free(&path);
     pnl_mat_free(&shift_path);
 }

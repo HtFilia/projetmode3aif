@@ -21,6 +21,9 @@ TEST(Payoff, ExampleHard)
     Basket* basketOption = new Basket(100, 10, 1, 1, lambda);
     PnlMat* path = pnl_mat_create_from_scalar(2, 1, 110);
     EXPECT_EQ(10,basketOption->payoff(path));
+    pnl_vect_free(&lambda);
+    lambda = nullptr;
+    basketOption->setLambda(NULL);
     pnl_mat_free(&path);
     delete basketOption;
 }
@@ -87,8 +90,6 @@ TEST(Payoff, allOptions)
     double r = 0.5;
     double rho = 0;
     PnlVect* lambda = pnl_vect_create_from_scalar(d, 0.2);
-    PnlVect* lambdaAsian = pnl_vect_copy(lambda);
-    PnlVect* lambdaPerf = pnl_vect_copy(lambda);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
 
@@ -103,8 +104,8 @@ TEST(Payoff, allOptions)
 
     // Création des options
     Basket* basketOption = new Basket(K, T, d, N, lambda);
-    Asian* asianOption = new Asian(K, T, d, N, lambdaAsian);
-    Performance* performanceOption = new Performance(T, d, N, lambdaPerf);
+    Asian* asianOption = new Asian(K, T, d, N, lambda);
+    Performance* performanceOption = new Performance(T, d, N, lambda);
 
     // Calcul et affichage des payoffs
     cout << "Payoff du basket : " << basketOption->payoff(path) << std::endl;
@@ -116,6 +117,11 @@ TEST(Payoff, allOptions)
     pnl_mat_free(&path);
     pnl_vect_free(&sigma);
     pnl_vect_free(&spot);
+    pnl_vect_free(&lambda);
+    lambda = nullptr;
+    basketOption->setLambda(NULL);
+    asianOption->setLambda(NULL);
+    performanceOption->setLambda(NULL);
     delete basketOption;
     delete asianOption;
     delete performanceOption;
