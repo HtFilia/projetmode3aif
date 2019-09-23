@@ -174,17 +174,20 @@ def run_singleexec_test(exe_fullpath, action):
         if test_case.suffix != ".dat" or test_case.match('*_market.dat'):
             continue
         outfile_path = None
+        timeout = None
         proc_args = [exe_fullpath.as_posix()]
         if action == PRICE:
             outfile_path = scenario_folder / (test_case.stem + "_obtained_price.json")
             proc_args.append(test_case.as_posix())
+            timeout = 60
         elif action == HEDGE:
             test_case_market = market_folder / (test_case.stem + '_market.dat')
             if not test_case_market.exists:
-                print(f'Market file {test_case_market.as_posix()} does not exist')
+                print('Market file ', test_case_market.as_posix(), ' does not exist')
                 continue
             proc_args.extend([test_case_market.as_posix(), test_case.as_posix()])
             outfile_path = scenario_folder / (test_case.stem + "_obtained_hedge.json")
+            timeout = 300
         else:
             print("Unknown action")
             return
@@ -192,7 +195,7 @@ def run_singleexec_test(exe_fullpath, action):
         print("Running ", proc_args)
         try:
             start_time = time.time()
-            exec_output = subprocess.run(proc_args, stdout=subprocess.PIPE, timeout=60, check=True)
+            exec_output = subprocess.run(proc_args, stdout=subprocess.PIPE, timeout=timeout, check=True)
             end_time = time.time()
             exec_result = json.loads(exec_output.stdout.decode('utf-8'))
             dict_result = {
@@ -214,7 +217,7 @@ def run_singleexec_test(exe_fullpath, action):
 #compare results
 def run_compare_results(action):
     for output_folder in (outdir_folder / "Outputs").iterdir():
-        if sum([tok[0] == '.' for tok in output_folder.parts]):
+        if sum([tok[0] == '.' for tok in output_folder.relative_to(outdir_folder).parts]):
             continue
         if not output_folder.match('**/*_output'):
             continue
@@ -242,6 +245,9 @@ def run_compare_results(action):
                 continue
             expected_file = test_case.parent / (test_case.stem + expected_suffix + '.json')
             output_file = output_folder / datadir.stem / (test_case.stem + obtained_suffix + '.json')
+            if not output_file.exists():
+                print('File ', output_file, ' does not exist')
+                continue
             print(exe + ": comparing " + expected_file.name + " with " + output_file.name)
             comparison = compare_function(output_file, expected_file)
             test_case_comparison = {

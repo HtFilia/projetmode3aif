@@ -9,7 +9,7 @@
 # Eclipse files
 .project
 
-# Build Directory 
+# Build Directory
 build/
 
 # Doc files
@@ -44,6 +44,10 @@ doc/html/
 *.exe
 *.out
 *.app
+
+# Outputs and Results directories
+Outputs/
+Results/
 
 ### CLion ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
