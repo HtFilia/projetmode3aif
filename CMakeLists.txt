@@ -63,43 +63,43 @@ add_subdirectory(src/3rdparty/jlparser)
 
 
 # Test the parser
-add_executable(test-parser tests/test_parser.cpp ${SRC})
+add_executable(test-parser src/tests/test_parser.cpp ${SRC})
 target_link_libraries(test-parser jl_parser ${LIBS})
 
-add_executable(mc-example tests/mc_example.cpp ${SRC})
+add_executable(mc-example src/tests/mc_example.cpp ${SRC})
 target_link_libraries(mc-example jl_parser ${LIBS})
 
 # Tests Pricer
-add_executable(test-payoff tests/testPayoff.cpp ${SRC})
+add_executable(test-payoff src/tests/testPayoff.cpp ${SRC})
 target_link_libraries(test-payoff jl_parser ${LIBS})
 
-add_executable(test-asset tests/testAsset.cpp ${SRC})
+add_executable(test-asset src/tests/testAsset.cpp ${SRC})
 target_link_libraries(test-asset jl_parser ${LIBS})
 
-add_executable(test-pricer0 tests/testPrice0.cpp ${SRC})
+add_executable(test-pricer0 src/tests/testPrice0.cpp ${SRC})
 target_link_libraries(test-pricer0 jl_parser ${LIBS})
 
-add_executable(test-pricert tests/testPriceT.cpp ${SRC})
+add_executable(test-pricert src/tests/testPriceT.cpp ${SRC})
 target_link_libraries(test-pricert jl_parser ${LIBS})
 
-add_executable(test-shift tests/testShiftAsset.cpp ${SRC})
+add_executable(test-shift src/tests/testShiftAsset.cpp ${SRC})
 target_link_libraries(test-shift jl_parser ${LIBS})
 
-add_executable(test-deltas tests/testDeltas.cpp ${SRC})
+add_executable(test-deltas src/tests/testDeltas.cpp ${SRC})
 target_link_libraries(test-deltas jl_parser ${LIBS})
 
-add_executable(test-couverture tests/testProfitAndLoss.cpp ${SRC})
+add_executable(test-couverture src/tests/testProfitAndLoss.cpp ${SRC})
 target_link_libraries(test-couverture jl_parser ${LIBS})
 
-add_executable(test-simulmarket tests/testSimulMarket.cpp ${SRC})
+add_executable(test-simulmarket src/tests/testSimulMarket.cpp ${SRC})
 target_link_libraries(test-simulmarket jl_parser ${LIBS})
 
 
 # Applications finales
-add_executable(price0 tests/price0.cpp ${SRC})
+add_executable(price0 src/apps/price0.cpp ${SRC})
 target_link_libraries(price0 jl_parser ${LIBS})
 
-add_executable(hedge tests/hedge.cpp ${SRC})
+add_executable(hedge src/apps/hedge.cpp ${SRC})
 target_link_libraries(hedge jl_parser ${LIBS})
 
 # Print compiler flags
@@ -145,5 +145,5 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(Google_Tests_run tests/test1.cpp src/Basket.hpp src/BlackScholesModel.cpp tests/testProfitAndLoss.cpp tests/testSimulMarket.cpp)
+add_executable(Google_Tests_run src/tests/test1.cpp src/Basket.hpp src/BlackScholesModel.cpp src/tests/testProfitAndLoss.cpp src/tests/testSimulMarket.cpp)
 target_link_libraries(Google_Tests_run gtest gtest_main jl_parser ${LIBS})

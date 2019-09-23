@@ -12,7 +12,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "../src/BlackScholesModel.hpp"
+#include "../BlackScholesModel.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 

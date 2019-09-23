@@ -1,33 +1,36 @@
 /**
- * \file testProfitAndLoss.cpp
+ * \file testShiftAsset.cpp
  *
- * \brief Fichier test de la méthode P&L pour différentes options.
+ * \brief Fichier test de la méthode shiftAsset.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
- * Fait le 21.09.2019
+ * Fait le 19.09.2019
  *
  */
 
 #include <iostream>
 #include <stdio.h>
-#include "../src/MonteCarlo.hpp"
-#include "../src/Basket.hpp"
-#include "../src/Asian.hpp"
-#include "../src/Performance.hpp"
+#include "../MonteCarlo.hpp"
+#include "../Basket.hpp"
+#include "../Asian.hpp"
+#include "../Performance.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
+
     // Hardcoded parameters
     double K = 100;
-    double fdSteps = 0.01;
+    double fdSteps = 0.1;
     int M = 1000;
-    int N = 150;
-    int H = 450;
-    int d = 2;
-    double r = 0.02;
+    int N = 5;
+    int NPast = 0;
+    int d = 10;
+    double r = 0.01;
     double rho = 0;
-    double T = 1.5;
+    double T = 0.5;
+    double t = (NPast) * T / (double)N;
+    std::cout << "t = " << t << std::endl;
     PnlVect *lambda = pnl_vect_create_from_scalar(d, 1 / (double)d);
     PnlVect *sigma = pnl_vect_create_from_scalar(d, 0.1);
     PnlVect *spot = pnl_vect_create_from_scalar(d, 100);
@@ -44,22 +47,22 @@ int main(int argc, char *argv[]) {
 
     // Monte Carlo Init
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, basketAverageOption, rng, fdSteps, M);
+    PnlVect *deltas = pnl_vect_create(d);
+    PnlVect *ic = pnl_vect_create(d);
 
-    // Paramètres de sortie
-    double prix = 0;
-    double ic = 0;
-    double error;
-
-    // Market Init
-    PnlMat *path = pnl_mat_create(H + 1, d);
-    bsModel->asset(path, T, H, rng);
+    // Past Market Init (to t_i)
+    PnlMat *past = pnl_mat_create(NPast + 1, d);
+    bsModel->asset(past, t, NPast, rng);
+    std::cout << "path : " << std::endl;
+    pnl_mat_print(past);
     pnl_rng_sseed(rng, time(NULL));
 
-    // Test Couverture
-    monteCarlo->profitAndLoss(path, prix, ic, error);
-    std::cout << "Prix en 0 : " << prix << std::endl;
-    std::cout << "icPrix en 0 : " << prix << std::endl;
-    std::cout << "Error : " << error << std::endl;
+    // Test Deltas
+    monteCarlo->delta(past, t, deltas, ic);
+    std::cout << "Deltas : " <<  std::endl;
+    pnl_vect_print(deltas);
+    std::cout << "IC : " << std::endl;
+    pnl_vect_print(ic);
 
     return 0;
 }

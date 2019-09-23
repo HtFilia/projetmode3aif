@@ -11,10 +11,10 @@
 
 #include <iostream>
 #include <stdio.h>
-#include "../src/MonteCarlo.hpp"
-#include "../src/Basket.hpp"
-#include "../src/Asian.hpp"
-#include "../src/Performance.hpp"
+#include "../MonteCarlo.hpp"
+#include "../Basket.hpp"
+#include "../Asian.hpp"
+#include "../Performance.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 

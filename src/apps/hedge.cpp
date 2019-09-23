@@ -1,8 +1,8 @@
 /**
- * \file price0.cpp
+ * \file hedge.cpp
  *
- * \brief Fichier source de l'application calculant le prix d'une option en 0 et
- *        les déviations standards des estimateurs pour un data donné en input.
+ * \brief Fichier source de l'application calculant le prix d'une option en 0
+ *        et son portefeuille de couverture pour un data donné en input.
  *
  * \authors LEBIHAN Lucas, COUTE Lucas, MOMMEJA Léonard, PRÊTRE-HECKENROTH Raphaël
  * Fait le 19.09.2019
@@ -14,17 +14,15 @@
 #include <string>
 
 #include "jlparser/parser.hpp"
-#include "../src/BlackScholesModel.hpp"
-#include "../src/Option.hpp"
-#include "../src/Asian.hpp"
-#include "../src/Performance.hpp"
-#include "../src/Basket.hpp"
-#include "../src/PricingResults.hpp"
-#include "../src/MonteCarlo.hpp"
+#include "../BlackScholesModel.hpp"
+#include "../Option.hpp"
+#include "../Asian.hpp"
+#include "../Performance.hpp"
+#include "../Basket.hpp"
+#include "../HedgingResults.hpp"
+#include "../MonteCarlo.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-
-using namespace std;
 
 int main(int argc, char **argv) {
 
@@ -44,10 +42,12 @@ int main(int argc, char **argv) {
     size_t n_samples;
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
     pnl_rng_sseed(rng, time(NULL));
-    double fdSteps = 0.00001;
+    double fdSteps = 0.00000001;
+
+    PnlMat *path = pnl_mat_create_from_file(argv[1]);
 
     // Parser and file to parse
-    char *infile = argv[1];
+    char *infile = argv[2];
     Param *P = new Parser(infile);
 
     // Parsing
@@ -92,22 +92,16 @@ int main(int argc, char **argv) {
     // Create MonteCarlo according to parameters
     MonteCarlo *monteCarlo = new MonteCarlo(bsModel, option, rng, fdSteps, n_samples);
 
-    // Create initial Market according to parameters
-    PnlMat *past0 = pnl_mat_create(1, size);
-    pnl_mat_set_row(past0, spot, 0);
-
     // Resultat variables
     double prix = 0;
     double prix_std_dev = 0;
-    PnlVect *delta = pnl_vect_create(size);
-    PnlVect *delta_std_dev = pnl_vect_create(size);
+    double erreur_couverture = 0;
 
     // Get price, deltas and st.deviation
-    monteCarlo->price(past0, 0, prix, prix_std_dev);
-    monteCarlo->delta(past0, 0, delta, delta_std_dev);
+    monteCarlo->profitAndLoss(path, prix, prix_std_dev, erreur_couverture);
 
     // Print Results
-    PricingResults res(prix, prix_std_dev, delta, delta_std_dev);
+    HedgingResults res(prix, prix_std_dev, erreur_couverture);
     std::cout << res << std::endl;
 
     //free
@@ -119,5 +113,6 @@ int main(int argc, char **argv) {
     delete option;
     delete bsModel;
     delete monteCarlo;
+
     return 0;
 }
