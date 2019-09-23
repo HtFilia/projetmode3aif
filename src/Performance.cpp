@@ -62,22 +62,11 @@ Performance::~Performance(){
 *
 */
 double Performance::payoff(const PnlMat *path) {
-    if (path->m != getTimeSteps() + 1) {
-        throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
-    } else if (path->n != getSize()) {
-        throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
-    } else {
         double res = 1;
-        PnlVect *oldSpots = pnl_vect_new();
-        pnl_mat_get_row(oldSpots, path, 0);
-        PnlVect *currentSpots = pnl_vect_new();
+        PnlVect *values = pnl_mat_mult_vect(path, lambda_);
         for (int i = 1; i <= getTimeSteps(); i++) {
-            pnl_mat_get_row(currentSpots, path, i);
-            res += MAX(pnl_vect_scalar_prod(lambda_, currentSpots) / pnl_vect_scalar_prod(lambda_, oldSpots) - 1, 0);
-            pnl_vect_clone(oldSpots, currentSpots);
+            res += MAX(GET(values, i) / GET(values, i - 1) - 1, 0);
         }
-        pnl_vect_free(&oldSpots);
-        pnl_vect_free(&currentSpots);
+        pnl_vect_free(&values);
         return res;
     }
-}
