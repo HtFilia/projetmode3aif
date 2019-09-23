@@ -235,6 +235,20 @@ public:
     void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past);
 
     /**
+     * Calcule une trajectoire du modèle connaissant le
+     * passé jusqu' à la date t
+     *
+     * @param[out] path  contient une trajectoire du sous-jacent
+     * donnée jusqu'à l'instant t par la matrice past
+     * @param[in] t date jusqu'à laquelle on connait la trajectoire.
+     * t n'est pas forcément une date de discrétisation
+     * @param[in] nbTimeSteps nombre de pas de constatation
+     * @param[in] T date jusqu'à laquelle on simule la trajectoire
+     * @param[in] past trajectoire réalisée jusqu'a la date t
+     */
+    void asset(PnlMat *path, double t, double T, int nbTimeSteps, PnlRng *rng, const PnlMat *past, const PnlMat *L, const PnlMat *G);
+
+    /**
      * Shift d'une trajectoire du sous-jacent
      *
      * @param[in]  path contient en input la trajectoire
