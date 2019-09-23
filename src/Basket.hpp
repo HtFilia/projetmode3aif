@@ -70,7 +70,7 @@ public:
 	* @return L'attribut \refitem lambda_
 	*
 	*/
-    PnlVect *getLambda();
+    PnlVect* getLambda() const;
 
     /**
      * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.

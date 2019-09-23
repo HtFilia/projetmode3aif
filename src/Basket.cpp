@@ -23,7 +23,7 @@ using namespace std;
 * \brief Constructeur du Basket Option.
 *
 */
-Basket(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
+Basket::Basket(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
     this->T_ = maturity;
     this->size_ = size;
     this->nbTimeSteps_ = nbTimeSteps;
@@ -31,7 +31,7 @@ Basket(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambd
     this->lambda_ = lambda;
 }
 
-Basket(const char *InputFile) {
+Basket::Basket(const char *InputFile) {
     Parser *P = new Parser(InputFile);
     int size;
     P->extract("maturity", this->T_);
@@ -43,7 +43,7 @@ Basket(const char *InputFile) {
     delete P;
 }
 //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
-~Basket(){
+Basket::~Basket(){
     //pnl_vect_free(&lambda_);
 }
 

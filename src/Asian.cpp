@@ -25,7 +25,7 @@
 * \brief Constructeur du Basket Option.
 *
 */
-Asian(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
+Asian::Asian(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda) {
     this->T_ = maturity;
     this->size_ = size;
     this->nbTimeSteps_ = nbTimeSteps;
@@ -33,7 +33,7 @@ Asian(double strike, double maturity, int size, int nbTimeSteps, PnlVect* lambda
     this->lambda_ = lambda;
 }
 
-Asian(const char *InputFile) {
+Asian::Asian(const char *InputFile) {
     Parser *P = new Parser(InputFile);
     int size;
     P->extract("maturity", this->T_);
@@ -48,7 +48,7 @@ Asian(const char *InputFile) {
 * \brief Destructeur de la classe Asian.
 *
 */
-~Asian() {};
+Asian::~Asian() {};
 
 /**
 * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.
