@@ -77,11 +77,6 @@ PnlVect* Basket::getLambda() const {
 *
 */
 double Basket::payoff(const PnlMat *path) {
-    if (path->m != getTimeSteps() + 1) {
-        throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
-    } else if (path->n != getSize()) {
-        throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
-    }
     PnlVect *lastSpots = pnl_vect_new();
     pnl_mat_get_row(lastSpots, path, getTimeSteps());
     double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);

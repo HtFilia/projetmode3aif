@@ -60,16 +60,8 @@ Asian::~Asian() {};
 *
 */
 double Asian::payoff(const PnlMat *path) {
-    if (path->m != getTimeSteps() + 1) {
-        throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
-    } else if (path->n != getSize()) {
-        throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
-    } else {
-        PnlVect *averageSpots = pnl_vect_new();
-        pnl_mat_sum_vect(averageSpots, path, 'r');
-        pnl_vect_div_scalar(averageSpots, getTimeSteps() + 1);
-        double res = MAX(pnl_vect_scalar_prod(lambda_, averageSpots) - K_, 0);
-        pnl_vect_free(&averageSpots);
-        return res;
-    }
+    PnlVect *values = pnl_mat_mult_vect(path, lambda_);
+    double res = MAX(pnl_vect_sum(values) / (getTimeSteps() + 1) - K_, 0);
+    pnl_vect_free(&values);
+    return res;
 }
