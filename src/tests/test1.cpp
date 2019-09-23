@@ -8,12 +8,12 @@
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include "jlparser/parser.hpp"
-#include "../src/Option.hpp"
-#include "../src/Basket.hpp"
-#include "../src/Asian.hpp"
-#include "../src/Performance.hpp"
-#include "../src/BlackScholesModel.hpp"
-#include "../src/MonteCarlo.hpp"
+#include "../Option.hpp"
+#include "../Basket.hpp"
+#include "../Asian.hpp"
+#include "../Performance.hpp"
+#include "../BlackScholesModel.hpp"
+#include "../MonteCarlo.hpp"
 
 
 using namespace std;

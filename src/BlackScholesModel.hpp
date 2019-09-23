@@ -56,6 +56,12 @@ private:
      */
     PnlVect *spot_;
 
+    /**
+     * \brief *trend_ correspond au vecteur des rentabilités moyennes des sous-jacents.
+     *
+     */
+    PnlVect *trend_;
+
 public:
 
     /**
@@ -101,11 +107,21 @@ public:
     /**
      * \brief Getter de l'attrivut \refitem spot_
      *
-     * @return l'attribut \refitem sigma_
+     * @return l'attribut \refitem spot_
      *
      */
     PnlVect *getSpot() {
         return spot_;
+    }
+
+    /**
+     * \brief Getter de l'attrivut \refitem trend_
+     *
+     * @return l'attribut \refitem trend_
+     *
+     */
+    PnlVect *getTrend() {
+        return trend_;
     }
 
     /**
@@ -158,6 +174,16 @@ public:
     }
 
     /**
+     * \brief Setter de l'attribut \refitem trend_
+     *
+     * @param newTrend le nouveau vecteur des rentabilités du modèle, \refitem trend_
+     *
+     */
+    void setTrend(PnlVect *newTrend) {
+        trend_ = newTrend;
+    }
+
+    /**
      * \brief Constructeur du BSModel.
      *
      */
@@ -169,8 +195,20 @@ public:
         this->spot_ = spot;
     }
 
-    ~BlackScholesModel(){
+    /**
+     * \brief Constructeur du BSModel avec les rentabilités moyennes.
+     *
+     */
+    BlackScholesModel(int size, double r, double rho, PnlVect *sigma, PnlVect *spot, PnlVect *trend) {
+        this->size_ = size;
+        this->r_ = r;
+        this->rho_ = rho;
+        this->sigma_ = sigma;
+        this->spot_ = spot;
+        this->trend_ = trend;
     }
+
+    ~BlackScholesModel(){}
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path
@@ -210,6 +248,16 @@ public:
      * @param[in] timestep pas de constatation du sous-jacent
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+
+    /**
+     * Simulation du marché
+     *
+     * @param[out]  path contient en input la simulation du marché
+     * T date jusqu'à laquelle on simule la trajectoire
+     * @param[in] H nombre de dates pour la simulation
+     * @param[in] rng générateur de nombres aléatoires
+     */
+    void simul_market(PnlMat *path, double T, int H, PnlRng *rng);
 };
 
 

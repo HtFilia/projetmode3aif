@@ -207,6 +207,17 @@ public:
      * de confiance sur le calcul du delta
      */
     void delta(const PnlMat *past, double t, PnlVect *delta, PnlVect *ic);
+
+    /**
+     * Calcule le P&L le long d'une trajectoire de marché
+     *
+     * @param[in] path contient la trajectoire de marché
+     * @param[out] prix contient le prix
+     * @param[out] ic contient la largeur de l'intervalle
+     * de confiance sur le calcul du prix
+     * @param[out] error contient l'erreur de couverture
+     */
+    void profitAndLoss(const PnlMat *path, double &prix, double &ic, double &error);
 };
 
 

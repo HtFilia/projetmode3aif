@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <stdio.h>
-#include "../src/BlackScholesModel.hpp"
+#include "../BlackScholesModel.hpp"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 
@@ -43,4 +43,13 @@ int main(int argv, char *argc[]) {
 
     bsModel->asset(path, T, N, rng);
     bsModel->shiftAsset(shiftPosPath, path, 1, fdSteps, t, T/N);
+
+    //
+    pnl_vect_free(&sigma);
+    pnl_vect_free(&spot);
+    pnl_vect_free(&lambda);
+    delete bsModel;
+    pnl_rng_free(&rng);
+    pnl_mat_free(&shiftPosPath);
+    pnl_mat_free(&path);
 }

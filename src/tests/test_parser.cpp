@@ -43,7 +43,6 @@ int main(int argc, char **argv)
     pnl_vect_print_asrow(sigma);
     cout << "Number of samples " << n_samples << endl;
 
-    //free
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
     pnl_vect_free(&divid);
