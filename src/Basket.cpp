@@ -81,13 +81,12 @@ double Basket::payoff(const PnlMat *path) {
         throw std::string("Le nombre de pas ne correspond pas à la taille du marché");
     } else if (path->n != getSize()) {
         throw std::string("Le nombre d'actifs sous-jacents ne correspond pas au marché");
-    } else {
-        PnlVect *lastSpots = pnl_vect_new();
-        pnl_mat_get_row(lastSpots, path, getTimeSteps());
-        double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);
-        pnl_vect_free(&lastSpots);
-        return res;
     }
+    PnlVect *lastSpots = pnl_vect_new();
+    pnl_mat_get_row(lastSpots, path, getTimeSteps());
+    double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);
+    pnl_vect_free(&lastSpots);
+    return res;
 }
 
 /**

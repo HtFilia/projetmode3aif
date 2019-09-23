@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     // Paramètres de sortie
     double prix = 0;
     double ic = 0;
-    double error;
+    double error = 0;
 
     // Market Init
     PnlMat *path = pnl_mat_create(H + 1, d);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     // Test Couverture
     monteCarlo->profitAndLoss(path, prix, ic, error);
     std::cout << "Prix en 0 : " << prix << std::endl;
-    std::cout << "icPrix en 0 : " << prix << std::endl;
+    std::cout << "icPrix en 0 : " << ic << std::endl;
     std::cout << "Error : " << error << std::endl;
 
     //free
