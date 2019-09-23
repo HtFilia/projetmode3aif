@@ -76,36 +76,6 @@ public:
     }
 
     /**
-     * \brief Setter de l'attribut \refitem T_
-     *
-     * @param[in] newMaturity la nouvelle maturité de l'option.
-     *
-     */
-    void setMaturity(double newMaturity) {
-        T_ = newMaturity;
-    }
-
-    /**
-     * \brief Setter de l'attribut \refitem size_
-     *
-     * @param[in] newSize la nouvelle dimension du modèle
-     *
-     */
-    void setSize(int newSize) {
-        size_ = newSize;
-    }
-
-    /**
-     * \brief Setter de l'attribut \refitem nbTimeSteps_
-     *
-     * @param[in] newTimeSteps le nouveau nombre de pas de temps discrétisé.
-     *
-     */
-    void setTimeSteps(int newTimeSteps) {
-        nbTimeSteps_ = newTimeSteps;
-    }
-
-    /**
      * \brief payoff calcule la valeur du payoff sur la trajectoire.
      *
      * \param[in] path est une matrice de taille (N+1) x D contenant une trajectoire du modèle telle que créée par la fonction asset.
