@@ -180,7 +180,7 @@ void MonteCarlo::profitAndLoss(const PnlMat *path, double &prix, double &icPrix,
     double timeStep = opt_->getMaturity() / (double)H;
     PnlVect *spots = pnl_vect_create(opt_->getSize());
     PnlVect *delta = pnl_vect_create(opt_->getSize());
-    PnlVect *varDelta = pnl_vect_create(opt_->getSize());
+    PnlVect *varDelta = pnl_vect_new();
     PnlVect *icDelta = pnl_vect_create(opt_->getSize());
     PnlMat *past = pnl_mat_create(1, opt_->getSize());
 
