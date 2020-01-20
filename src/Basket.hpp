@@ -88,6 +88,8 @@ public:
 	*
 	*/
     void RedirectToFile(const char *path);
+
+    void setLambda(PnlVect *lambda);
 };
 
 #endif //PROJETMODPRO_BASKET_H

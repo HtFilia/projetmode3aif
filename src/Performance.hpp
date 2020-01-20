@@ -65,6 +65,8 @@ public:
      *
      */
     double payoff(const PnlMat *path);
+
+    void setLambda(PnlVect *lambda);
 };
 
 #endif //PROJETMODPRO_PERFORMANCE_H

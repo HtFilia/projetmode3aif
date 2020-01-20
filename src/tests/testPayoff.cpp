@@ -56,6 +56,10 @@ int main(int argc, char *argv[]) {
     pnl_vect_free(&spot);
     pnl_vect_free(&lambda);
     pnl_rng_free(&rng);
+    lambda = nullptr;
+    basketOption->setLambda(NULL);
+    asianOption->setLambda(NULL);
+    performanceOption->setLambda(NULL);
     delete basketOption;
     delete asianOption;
     delete performanceOption;

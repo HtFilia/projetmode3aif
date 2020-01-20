@@ -48,7 +48,16 @@ Asian::Asian(const char *InputFile) {
 * \brief Destructeur de la classe Asian.
 *
 */
-Asian::~Asian() {};
+Asian::~Asian() {
+    if (lambda_) {
+        pnl_vect_free(&lambda_);
+    }
+};
+
+
+void Asian::setLambda(PnlVect *lambda) {
+    lambda_ = lambda;
+}
 
 /**
 * \brief Calcule le payoff de l'option Basket suivant le marché qu'on lui donne.

@@ -44,7 +44,9 @@ Basket::Basket(const char *InputFile) {
 }
 //destructuer n'a pas à libérer le lambda, vous devez libérer les pnl_vect vous memes dans les tests selon moi
 Basket::~Basket(){
-    //pnl_vect_free(&lambda_);
+    if (lambda_) {
+        pnl_vect_free(&lambda_);
+    }
 }
 
 /**
@@ -65,6 +67,10 @@ double Basket::getK() const {
 */
 PnlVect* Basket::getLambda() const {
     return lambda_;
+}
+
+void Basket::setLambda(PnlVect *lambda) {
+    lambda_ = lambda;
 }
 
 /**
