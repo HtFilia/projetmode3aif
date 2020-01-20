@@ -17,9 +17,9 @@
 #include "pnl/pnl_matrix.h"
 
 int main(int argc, char *argv[]) {
-    int N1 = 8;
-    int N = 8;
-    int d = 5;
+    int N1 = 1;
+    int N = 1;
+    int d = 2;
     double r = 0.1;
     double rho = 0.2;
     double T = 1;
@@ -29,14 +29,15 @@ int main(int argc, char *argv[]) {
 
     PnlMat* past = pnl_mat_create(N1+1, d);
     PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
-    pnl_rng_sseed(rng, time(NULL));
+    pnl_rng_sseed(rng, 1);
     bsModel->asset(past, T, N1, rng);
     pnl_mat_print(past);
+    pnl_rng_sseed(rng, time(NULL));
 
     std::cout << std::endl << std::endl;
 
     PnlMat* path = pnl_mat_create(N+1, d);
-    double t = (N1) * (T / (double)N);
+    double t = (N1 - 0.5) * (T / (double)N);
     bsModel->asset(path, t, T, N, rng, past);
     pnl_mat_print(path);
 

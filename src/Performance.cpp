@@ -62,11 +62,19 @@ Performance::~Performance(){
 *
 */
 double Performance::payoff(const PnlMat *path) {
-        double res = 1;
-        PnlVect *values = pnl_mat_mult_vect(path, lambda_);
-        for (int i = 1; i <= getTimeSteps(); i++) {
-            res += MAX(GET(values, i) / GET(values, i - 1) - 1, 0);
+    double res = 1;
+    double oldValue;
+    double value = 0;
+    for (int j = 0; j < getSize(); j++) {
+        value += GET(lambda_, j) * MGET(path, 0, j);
+    }
+    for (size_t i = 1; i <= getTimeSteps(); i++) {
+        oldValue = value;
+        value = 0;
+        for (int j = 0; j < getSize(); j++) {
+            value += GET(lambda_, j) * MGET(path, i, j);
         }
-        pnl_vect_free(&values);
-        return res;
+        res += MAX(value / oldValue - 1, 0);
+    }
+    return res;
     }

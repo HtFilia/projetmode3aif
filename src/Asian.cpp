@@ -60,8 +60,12 @@ Asian::~Asian() {};
 *
 */
 double Asian::payoff(const PnlMat *path) {
-    PnlVect *values = pnl_mat_mult_vect(path, lambda_);
-    double res = MAX(pnl_vect_sum(values) / (getTimeSteps() + 1) - K_, 0);
-    pnl_vect_free(&values);
+    double value = 0;
+    for (size_t i = 0; i <= getTimeSteps(); i++) {
+        for (int j = 0; j < getSize(); j++) {
+            value += GET(lambda_, j) * MGET(path, i, j);
+        }
+    }
+    double res = MAX(value / (getTimeSteps() + 1) - K_, 0);
     return res;
 }

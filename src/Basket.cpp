@@ -77,10 +77,11 @@ PnlVect* Basket::getLambda() const {
 *
 */
 double Basket::payoff(const PnlMat *path) {
-    PnlVect *lastSpots = pnl_vect_new();
-    pnl_mat_get_row(lastSpots, path, getTimeSteps());
-    double res = MAX(pnl_vect_scalar_prod(lambda_, lastSpots) - K_, 0);
-    pnl_vect_free(&lastSpots);
+    double value = 0;
+    for (size_t i = 0; i < getSize(); i++) {
+        value += GET(lambda_, i) * MGET(path, getTimeSteps(), i);
+    }
+    double res = MAX(value - K_, 0);
     return res;
 }
 
