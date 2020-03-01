@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <string>
 
+#include "mpi.h"
 #include "jlparser/parser.hpp"
 #include "../BlackScholesModel.hpp"
 #include "../Option.hpp"
@@ -28,6 +29,13 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
+    //MPI init
+    int sizeMPI, rankMPI;
+    MPI_Init (&argc, &argv);
+    MPI_Comm_size (MPI_COMM_WORLD, &sizeMPI);
+    MPI_Comm_rank (MPI_COMM_WORLD, &rankMPI);
+
+
     // Option variables
     double T, strike, payoffCoeff;
     PnlVect *divid, *lambda;
@@ -42,7 +50,8 @@ int main(int argc, char **argv) {
 
     // MonteCarlo variables
     size_t n_samples;
-    PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+    // PnlRng *rng = pnl_rng_create(PNL_RNG_MERSENNE);
+    PnlRng *rng = pnl_rng_dcmt_create_id(rankMPI, 1);
     pnl_rng_sseed(rng, time(NULL));
     double fdSteps = 0.00001;
 
@@ -103,8 +112,13 @@ int main(int argc, char **argv) {
     PnlVect *delta_std_dev = pnl_vect_create(size);
 
     // Get price, deltas and st.deviation
-    monteCarlo->price(past0, 0, prix, prix_std_dev);
-    monteCarlo->delta(past0, 0, delta, delta_std_dev);
+    if (rankMPI == 0) {
+      monteCarlo->price_master(prix, prix_std_dev, sizeMPI);
+    }
+    else {
+      monteCarlo->price_slave(sizeMPI, rankMPI);
+    }
+    // monteCarlo->delta(past0, 0, delta, delta_std_dev);
 
     // Print Results
     PricingResults res(prix, prix_std_dev, delta, delta_std_dev);
@@ -119,5 +133,7 @@ int main(int argc, char **argv) {
     delete option;
     delete bsModel;
     delete monteCarlo;
+
+    MPI_Finalize();
     return 0;
 }

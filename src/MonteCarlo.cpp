@@ -12,6 +12,7 @@
 #include <math.h>
 #include <iostream>
 
+#include "mpi.h"
 #include "MonteCarlo.hpp"
 
 /**
@@ -39,6 +40,59 @@ void MonteCarlo::price(double &prix, double &ic) {
     //free
     pnl_mat_free(&path);
 }
+
+
+void MonteCarlo::price_master(double &prix, double &ic, int sizeMPI) {
+    PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
+    prix = 0;
+    double var = 0;
+    double price_master = 0;
+    double var_master = 0;
+
+    for (int i = 0; i < nbSamples_/sizeMPI; i++) {
+        mod_->asset(path, opt_->getMaturity(), opt_->getTimeSteps(), rng_);
+        double tmp = opt_->payoff(path);
+        price_master += tmp;
+        var_master += SQR(tmp);
+    }
+
+    double* prices_slave = new double[sizeMPI];
+    double* vars_slave = new double[sizeMPI];
+    MPI_Gather(&price_master, 1, MPI_DOUBLE, prices_slave, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&var_master, 1, MPI_DOUBLE, vars_slave, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    for (int i = 0; i < sizeMPI ; i++) {
+        prix+=prices_slave[i];
+        var+=vars_slave[i];
+    }
+
+    prix = exp(- mod_->getR() * opt_->getMaturity()) * prix / nbSamples_;
+    var = exp(-2 * mod_->getR() * opt_->getMaturity()) * var / nbSamples_ - SQR(prix);
+    ic = sqrt(var / (double)nbSamples_);
+
+    //free
+    pnl_mat_free(&path);
+}
+
+
+void MonteCarlo::price_slave(int sizeMPI, int rankMPI) {
+    PnlMat* path = pnl_mat_create(opt_->getTimeSteps() + 1, mod_->getSize());
+    double prix_slave = 0;
+    double var_slave = 0;
+
+    for (int i = nbSamples_*rankMPI/sizeMPI; i < nbSamples_*(rankMPI+1)/sizeMPI; i++) {
+        mod_->asset(path, opt_->getMaturity(), opt_->getTimeSteps(), rng_);
+        double tmp = opt_->payoff(path);
+        prix_slave += tmp;
+        var_slave += SQR(tmp);
+    }
+    MPI_Gather(&prix_slave, 1, MPI_DOUBLE, 0, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&var_slave, 1, MPI_DOUBLE, 0, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    //free
+    pnl_mat_free(&path);
+}
+
 
 /**
  * Calcule le prix de l'option à la date t
