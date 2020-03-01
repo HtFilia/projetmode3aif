@@ -111,9 +111,14 @@ int main(int argc, char **argv) {
     PnlVect *delta = pnl_vect_create(size);
     PnlVect *delta_std_dev = pnl_vect_create(size);
 
+
+    double start, end;
     // Get price, deltas and st.deviation
     if (rankMPI == 0) {
+      start = MPI_Wtime();
       monteCarlo->price_master(prix, prix_std_dev, sizeMPI);
+      end = MPI_Wtime();
+      std::cout << "temps total écoulé " << end-start << std::endl;
     }
     else {
       monteCarlo->price_slave(sizeMPI, rankMPI);
@@ -121,8 +126,10 @@ int main(int argc, char **argv) {
     // monteCarlo->delta(past0, 0, delta, delta_std_dev);
 
     // Print Results
-    PricingResults res(prix, prix_std_dev, delta, delta_std_dev);
-    std::cout << res << std::endl;
+    if (rankMPI == 0) {
+      PricingResults res(prix, prix_std_dev, delta, delta_std_dev);
+      std::cout << res << std::endl;
+    }
 
     //free
     pnl_vect_free(&spot);
